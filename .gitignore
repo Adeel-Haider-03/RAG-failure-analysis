@@ -1,6 +1,5 @@
 index/
 results/
-docs/
 .env
 venv/
 __pycache__/

@@ -15,6 +15,8 @@ The goal is to analyze **where and why** RAG systems fail — and whether those 
 
 ## Corpus
 
+Source: https://www.hec.gov.pk/english/policies/Pages/default.aspx
+
 Four publicly available HEC policy documents placed in the `docs/` folder:
 
 | File                            | Framework                        | Year | Chunks |
