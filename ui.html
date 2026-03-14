@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAG Failure Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f14;
+    --surface: #161820;
+    --surface2: #1e2028;
+    --border: #2a2d3a;
+    --border2: #363a4a;
+    --text: #e2e4ed;
+    --text2: #8b8fa8;
+    --text3: #5a5e72;
+    --accent: #4f8ef7;
+    --accent2: #3a6fd4;
+    --green: #3ecf8e;
+    --red: #f06560;
+    --yellow: #f5a623;
+    --purple: #b088f9;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Header ── */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: var(--mono);
+    letter-spacing: 0.5px;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .corpus-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.3px;
+  }
+
+  .mode-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text2);
+  }
+
+  .toggle-switch {
+    position: relative;
+    width: 40px;
+    height: 22px;
+    cursor: pointer;
+  }
+
+  .toggle-switch input { display: none; }
+
+  .toggle-track {
+    position: absolute;
+    inset: 0;
+    background: var(--border2);
+    border-radius: 11px;
+    transition: background 0.2s;
+  }
+
+  .toggle-switch input:checked ~ .toggle-track {
+    background: var(--accent);
+  }
+
+  .toggle-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+
+  .toggle-switch input:checked ~ .toggle-track .toggle-thumb {
+    transform: translateX(18px);
+  }
+
+  /* ── Layout ── */
+  .layout {
+    display: flex;
+    flex: 1;
+    height: calc(100vh - 65px);
+    overflow: hidden;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .sidebar-header {
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .sidebar-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .q-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  .sidebar-list {
+    overflow-y: auto;
+    flex: 1;
+    padding: 8px 0;
+  }
+
+  .sidebar-list::-webkit-scrollbar { width: 4px; }
+  .sidebar-list::-webkit-scrollbar-track { background: transparent; }
+  .sidebar-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .q-item {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.15s;
+    position: relative;
+  }
+
+  .q-item:hover { background: var(--surface2); }
+
+  .q-item.active {
+    border-left-color: var(--accent);
+    background: rgba(79, 142, 247, 0.08);
+  }
+
+  .q-id {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+  }
+
+  .q-text {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .q-item.active .q-text { color: var(--text); }
+
+  .q-cat {
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 4px;
+    font-family: var(--mono);
+  }
+
+  /* ── Main ── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  /* ── Input Area ── */
+  .input-area {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .input-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  .question-input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: var(--sans);
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    resize: none;
+    min-height: 48px;
+    max-height: 120px;
+    line-height: 1.5;
+    transition: border-color 0.15s;
+  }
+
+  .question-input::placeholder { color: var(--text3); }
+  .question-input:focus { border-color: var(--accent); }
+
+  .ask-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 22px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ask-btn:hover:not(:disabled) { background: var(--accent2); }
+  .ask-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .ask-btn .spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+
+  .ask-btn.loading .spinner { display: block; }
+  .ask-btn.loading .btn-label { display: none; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Results Area ── */
+  .results-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 28px;
+  }
+
+  .results-area::-webkit-scrollbar { width: 6px; }
+  .results-area::-webkit-scrollbar-track { background: transparent; }
+  .results-area::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* ── Empty State ── */
+  .empty-state {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--text3);
+  }
+
+  .empty-icon {
+    font-size: 40px;
+    opacity: 0.4;
+  }
+
+  .empty-text {
+    font-size: 14px;
+    color: var(--text3);
+  }
+
+  .empty-sub {
+    font-size: 12px;
+    color: var(--text3);
+    opacity: 0.7;
+  }
+
+  /* ── Result Card ── */
+  .result-card {
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .result-qid {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 500;
+    background: rgba(79,142,247,0.1);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .result-cat {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+
+  .mode-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .mode-badge.standard {
+    background: rgba(139,143,168,0.12);
+    color: var(--text2);
+  }
+
+  .mode-badge.diverse {
+    background: rgba(62,207,142,0.12);
+    color: var(--green);
+  }
+
+  /* ── Answer Box ── */
+  .answer-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .answer-header {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+  }
+
+  .answer-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text3);
+  }
+
+  .answer-body {
+    padding: 16px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+
+  /* ── Hypothesis Box ── */
+  .hypothesis-box {
+    background: rgba(245,166,35,0.06);
+    border: 1px solid rgba(245,166,35,0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .hypothesis-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--yellow);
+    margin-bottom: 5px;
+  }
+
+  /* ── Retrieved Chunks ── */
+  .chunks-section {
+    margin-bottom: 20px;
+  }
+
+  .chunks-header {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text3);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .chunks-summary {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    background: var(--surface2);
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  .chunk-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .chunk-item:hover { border-color: var(--border2); }
+
+  .chunk-header {
+    padding: 8px 14px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .chunk-source {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .chunk-source.dnp { color: var(--purple); }
+  .chunk-source.mp { color: var(--green); }
+  .chunk-source.pe { color: var(--accent); }
+  .chunk-source.pop { color: var(--yellow); }
+
+  .chunk-score {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .score-bar {
+    width: 60px;
+    height: 4px;
+    background: var(--border2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .score-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .chunk-body {
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.6;
+    font-family: var(--mono);
+    display: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .chunk-item.expanded .chunk-body { display: block; }
+
+  .chunk-expand {
+    font-size: 10px;
+    color: var(--text3);
+    cursor: pointer;
+  }
+
+  /* ── Source distribution bar ── */
+  .source-dist {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+
+  .dist-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text3);
+    margin-bottom: 12px;
+  }
+
+  .dist-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .dist-name {
+    font-family: var(--mono);
+    font-size: 11px;
+    width: 200px;
+    flex-shrink: 0;
+  }
+
+  .dist-bar-wrap {
+    flex: 1;
+    height: 8px;
+    background: var(--border2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .dist-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+
+  .dist-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    width: 20px;
+    text-align: right;
+  }
+
+  /* ── Warning banner for single-doc dominance ── */
+  .dominance-warning {
+    background: rgba(240,101,96,0.08);
+    border: 1px solid rgba(240,101,96,0.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* ── Error ── */
+  .error-box {
+    background: rgba(240,101,96,0.08);
+    border: 1px solid rgba(240,101,96,0.25);
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: var(--red);
+    font-size: 13px;
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">R</div>
+    <div>
+      <div class="logo-text">RAG Failure Analysis</div>
+      <div class="logo-sub">HEC Pakistan Policy Documents</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="corpus-badge">4 docs · 163 chunks</div>
+    <div class="mode-toggle">
+      <span>Standard</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="diverseToggle">
+        <div class="toggle-track">
+          <div class="toggle-thumb"></div>
+        </div>
+      </label>
+      <span>Diverse</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- Sidebar: Pre-designed questions -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Questions</span>
+      <span class="q-count" id="qCount">—</span>
+    </div>
+    <div class="sidebar-list" id="sidebarList">
+      <div style="padding:20px;color:var(--text3);font-size:12px;">Loading questions...</div>
+    </div>
+  </aside>
+
+  <!-- Main area -->
+  <main class="main">
+
+    <!-- Input -->
+    <div class="input-area">
+      <div class="input-label">Ask a question</div>
+      <div class="input-row">
+        <textarea
+          class="question-input"
+          id="questionInput"
+          placeholder="Type your own question, or select one from the sidebar..."
+          rows="1"
+        ></textarea>
+        <button class="ask-btn" id="askBtn" onclick="ask()">
+          <span class="btn-label">Ask</span>
+          <div class="spinner"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="results-area" id="resultsArea">
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">◎</div>
+        <div class="empty-text">No question asked yet</div>
+        <div class="empty-sub">Select from the sidebar or type your own question above</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+let questions = [];
+let activeQId = null;
+
+const SOURCE_COLORS = {
+  'Framework-DNP.pdf': { cls: 'dnp', color: '#b088f9', label: 'DNP Framework' },
+  'Framework-MP.pdf':  { cls: 'mp',  color: '#3ecf8e', label: 'MP Framework' },
+  'Framework-PE.pdf':  { cls: 'pe',  color: '#4f8ef7', label: 'PE Framework' },
+  'Appointment-Prof-Practice.pdf': { cls: 'pop', color: '#f5a623', label: 'Prof of Practice' },
+};
+
+// ── Load sidebar questions ─────────────────────────────────────
+async function loadQuestions() {
+  try {
+    const res = await fetch('/questions');
+    questions = await res.json();
+    const list = document.getElementById('sidebarList');
+    document.getElementById('qCount').textContent = questions.length;
+
+    list.innerHTML = '';
+    questions.forEach(q => {
+      const item = document.createElement('div');
+      item.className = 'q-item';
+      item.dataset.id = q.id;
+      item.innerHTML = `
+        <div class="q-id">${q.id}</div>
+        <div class="q-text">${q.question}</div>
+        <div class="q-cat">${q.category}</div>
+      `;
+      item.onclick = () => selectQuestion(q);
+      list.appendChild(item);
+    });
+  } catch(e) {
+    document.getElementById('sidebarList').innerHTML =
+      '<div style="padding:20px;color:var(--red);font-size:12px;">Failed to load questions</div>';
+  }
+}
+
+function selectQuestion(q) {
+  activeQId = q.id;
+  document.querySelectorAll('.q-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.id === q.id);
+  });
+  document.getElementById('questionInput').value = q.question;
+  autoResize();
+}
+
+// ── Auto-resize textarea ───────────────────────────────────────
+function autoResize() {
+  const ta = document.getElementById('questionInput');
+  ta.style.height = 'auto';
+  ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+}
+document.getElementById('questionInput').addEventListener('input', autoResize);
+document.getElementById('questionInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(); }
+});
+
+// ── Ask ────────────────────────────────────────────────────────
+async function ask() {
+  const input = document.getElementById('questionInput');
+  const question = input.value.trim();
+  if (!question) return;
+
+  const diverse = document.getElementById('diverseToggle').checked;
+  const btn = document.getElementById('askBtn');
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  // Find matching pre-designed question for metadata
+  const preQ = questions.find(q => q.question === question);
+
+  try {
+    const res = await fetch('/ask', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, diverse })
+    });
+    const data = await res.json();
+
+    if (data.error) {
+      showError(data.error);
+    } else {
+      showResult(question, data, preQ, diverse);
+    }
+  } catch(e) {
+    showError('Request failed. Is the server running?');
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
+}
+
+// ── Render result ──────────────────────────────────────────────
+function showResult(question, data, preQ, diverse) {
+  const area = document.getElementById('resultsArea');
+  document.getElementById('emptyState')?.remove();
+
+  // Source distribution
+  const sourceCounts = {};
+  data.retrieved_chunks.forEach(c => {
+    sourceCounts[c.source] = (sourceCounts[c.source] || 0) + 1;
+  });
+
+  const uniqueSources = Object.keys(sourceCounts).length;
+  const isDominated = uniqueSources === 1;
+  const total = data.retrieved_chunks.length;
+
+  // Build HTML
+  let html = `<div class="result-card">`;
+
+  // Meta row
+  html += `<div class="result-meta">`;
+  if (preQ) html += `<span class="result-qid">${preQ.id}</span>`;
+  if (preQ) html += `<span class="result-cat">${preQ.category}</span>`;
+  html += `<span class="mode-badge ${diverse ? 'diverse' : 'standard'}">${diverse ? 'diverse retrieval' : 'standard retrieval'}</span>`;
+  html += `</div>`;
+
+  // Dominance warning
+  if (isDominated) {
+    const src = SOURCE_COLORS[data.retrieved_chunks[0].source];
+    html += `<div class="dominance-warning">
+      ⚠ All ${total} chunks from <strong>${src ? src.label : data.retrieved_chunks[0].source}</strong> — possible document length bias
+    </div>`;
+  }
+
+  // Hypothesis
+  if (preQ?.hypothesis) {
+    html += `<div class="hypothesis-box">
+      <div class="hypothesis-label">Hypothesis</div>
+      ${escHtml(preQ.hypothesis)}
+    </div>`;
+  }
+
+  // Answer
+  html += `<div class="answer-box">
+    <div class="answer-header">
+      <div class="answer-label">Answer</div>
+    </div>
+    <div class="answer-body">${escHtml(data.answer)}</div>
+  </div>`;
+
+  // Source distribution
+  html += `<div class="source-dist">
+    <div class="dist-label">Source Distribution (${uniqueSources} doc${uniqueSources !== 1 ? 's' : ''})</div>`;
+
+  Object.entries(sourceCounts).sort((a,b) => b[1]-a[1]).forEach(([src, count]) => {
+    const info = SOURCE_COLORS[src] || { color: '#8b8fa8', label: src };
+    const pct = (count / total * 100).toFixed(0);
+    html += `<div class="dist-row">
+      <span class="dist-name" style="color:${info.color};font-family:var(--mono);font-size:11px;">${info.label || src}</span>
+      <div class="dist-bar-wrap">
+        <div class="dist-bar-fill" style="width:${pct}%;background:${info.color};"></div>
+      </div>
+      <span class="dist-count">${count}</span>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // Retrieved chunks
+  html += `<div class="chunks-section">
+    <div class="chunks-header">
+      Retrieved Chunks
+      <span class="chunks-summary">${total} chunks · click to expand</span>
+    </div>`;
+
+  data.retrieved_chunks.forEach((chunk, i) => {
+    const info = SOURCE_COLORS[chunk.source] || { cls: '', color: '#8b8fa8' };
+    const scorePct = Math.round(chunk.score * 100);
+    html += `<div class="chunk-item" id="chunk-${i}">
+      <div class="chunk-header" onclick="toggleChunk(${i})">
+        <span class="chunk-source ${info.cls}">${chunk.source}</span>
+        <span class="chunk-score">
+          <div class="score-bar"><div class="score-fill" style="width:${scorePct}%"></div></div>
+          ${chunk.score.toFixed(4)}
+          <span class="chunk-expand">▾</span>
+        </span>
+      </div>
+      <div class="chunk-body">${escHtml(chunk.text)}</div>
+    </div>`;
+  });
+
+  html += `</div></div>`;
+
+  area.innerHTML = html;
+  area.scrollTop = 0;
+}
+
+function toggleChunk(i) {
+  document.getElementById(`chunk-${i}`).classList.toggle('expanded');
+}
+
+function showError(msg) {
+  const area = document.getElementById('resultsArea');
+  document.getElementById('emptyState')?.remove();
+  area.innerHTML = `<div class="error-box">Error: ${escHtml(msg)}</div>`;
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/\n/g, '<br>');
+}
+
+// ── Init ───────────────────────────────────────────────────────
+loadQuestions();
+</script>
+</body>
+</html>

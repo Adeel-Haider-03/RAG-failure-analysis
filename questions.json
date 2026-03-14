@@ -1,0 +1,86 @@
+[
+  {
+    "id": "Q1",
+    "category": "Same Numbers, Different Rules",
+    "question": "How much honorarium does a Professor Emeritus receive, and how does it compare to a DNP awardee?",
+    "reason": "Both PE and DNP pay Rs. 200,000 but PE pays monthly while DNP pays bi-annually. Same number, completely different frequency, likely to cause the model to conflate the two payment structures.",
+    "hypothesis": "Retrieval will be dominated by the larger DNP document (73 chunks vs PE's 21 chunks), so the PE honorarium may never be retrieved at all."
+  },
+  {
+    "id": "Q2",
+    "category": "Same Numbers, Different Rules",
+    "question": "How is research funding scored differently in the Meritorious Professor framework versus the DNP framework?",
+    "reason": "MP awards 1 mark per Rs. 1 million (max 13 marks), while DNP awards 1 mark per Rs. 5 million (max 12 marks). The sentence structure is nearly identical but the thresholds are completely different.",
+    "hypothesis": "Similar phrasing across documents will cause retrieval confusion, the model may blend the two scoring systems or report only one."
+  },
+  {
+    "id": "Q3",
+    "category": "Multi-Document Reasoning",
+    "question": "Does holding the title of HEC Distinguished National Professor provide any scoring advantage when applying for Meritorious Professor?",
+    "reason": "The answer (1 mark in MP scoring for DNP title holders) is buried in the MP scoring table. Answering correctly requires retrieving a specific MP chunk that references DNP, a cross-document link with no obvious keywords.",
+    "hypothesis": "Retrieval failure, the DNP document will dominate results due to length bias, and the specific MP scoring chunk containing this rule is unlikely to rank highly."
+  },
+  {
+    "id": "Q4",
+    "category": "Multi-Document Reasoning",
+    "question": "What special provisions exist for Vice Chancellors across all four HEC professor appointment frameworks?",
+    "reason": "The answer requires combining VC-related rules from all four documents. No single chunk contains the full picture.",
+    "hypothesis": "Partial retrieval failure, the model will likely cover 2 of 4 documents and present an incomplete answer as complete."
+  },
+  {
+    "id": "Q5",
+    "category": "Conditional Answers",
+    "question": "Can a Professor Emeritus apply for HEC research funding, and if so, under what conditions?",
+    "reason": "The answer has two specific conditions: age must be under 65, and a Co-PI from the host institution is required. Generation models tend to drop conditional clauses and state only the main rule.",
+    "hypothesis": "Generation failure, the model will confirm eligibility but omit one or both conditions, presenting an incomplete answer."
+  },
+  {
+    "id": "Q6",
+    "category": "Conditional Answers",
+    "question": "Can a Professor Emeritus serve in an administrative role at a university?",
+    "reason": "The answer is conditional: normally no, but yes at young universities where senior faculty are unavailable. This nuance is easy to flatten into a simple yes or no.",
+    "hypothesis": "Generation failure, the model will give a flat yes or no, losing the conditional clause about young universities."
+  },
+  {
+    "id": "Q7",
+    "category": "Buried Eligibility Conditions",
+    "question": "Can a professor who is 61 years old apply for the DNP award?",
+    "reason": "The age limit (must be under 60) is buried in Annex-I of the DNP framework, not in the main eligibility section. Retrieval systems typically rank body text higher than annexes.",
+    "hypothesis": "Retrieval failure, the main eligibility section will be retrieved instead of the annex, and the age condition will be missed entirely."
+  },
+  {
+    "id": "Q8",
+    "category": "Process and Authority Confusion",
+    "question": "What happens if the Syndicate does not endorse the Selection Board's recommendation for Meritorious Professor?",
+    "reason": "Both MP and DNP describe selection processes using similar vocabulary. The specific Syndicate escalation process is unique to MP but similar terms appear in DNP.",
+    "hypothesis": "Retrieval confusion, DNP process chunks may rank higher than the specific MP Syndicate clause due to shared vocabulary."
+  },
+  {
+    "id": "Q9",
+    "category": "Process and Authority Confusion",
+    "question": "What is the difference between the authority that confers the Meritorious Professor title versus the DNP title?",
+    "reason": "MP is conferred at the university level (Selection Board → Syndicate → Chancellor), while DNP is conferred nationally by HEC. Both use 'selection committee' and 'university' heavily.",
+    "hypothesis": "Retrieval failure, only DNP chunks will be retrieved due to length bias, making comparison impossible."
+  },
+  {
+    "id": "Q10",
+    "category": "Category Confusion — PoP vs Academic Track",
+    "question": "Does a Professor of Practice need to have a PhD and research publications to be appointed?",
+    "reason": "The MP and DNP frameworks both require PhD and publications for appointment. PoP explicitly states PhD is 'preferable but not mandatory' and research publications are irrelevant, the only requirement is professional experience. The keyword 'professor appointment' is likely to pull MP and DNP eligibility chunks which are saturated with PhD and publication requirements.",
+    "hypothesis": "Retrieval failure, MP or DNP eligibility chunks will outrank the PoP eligibility section, giving the wrong answer."
+  },
+  {
+    "id": "Q11",
+    "category": "Category Confusion — PoP vs Academic Track",
+    "question": "Can a Professor of Practice eventually convert to a permanent position and become eligible for the DNP or Meritorious Professor title?",
+    "reason": "PoP explicitly prohibits tenure-track conversion. MP and DNP both require full-time permanent professors. Answering correctly requires linking all three documents.",
+    "hypothesis": "Partial retrieval, PoP may be retrieved correctly, but the permanent employment requirement from MP and DNP is unlikely to also appear in the same top-5 results."
+  },
+  {
+    "id": "Q12",
+    "category": "Temporal and Version Confusion",
+    "question": "The DNP framework was updated in 2025 while the MP framework is from 2024. Are there any criteria that changed or conflict between the two versions, specifically around the list of recognized international awards?",
+    "reason": "Both documents contain an international awards annex that appears word-for-word identical despite being from different years. A RAG system cannot reason about document versioning or temporal precedence, it treats all chunks as equally current.",
+    "hypothesis": "Ambiguity failure, the model cannot determine which version takes precedence and is likely to either miss the comparison entirely or hallucinate a difference between two lists that are actually identical."
+  }
+]

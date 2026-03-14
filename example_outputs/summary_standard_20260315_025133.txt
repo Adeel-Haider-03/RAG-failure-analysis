@@ -1,0 +1,209 @@
+RAG Failure Analysis Results [STANDARD]
+
+============================================================
+
+============================================================
+ID: Q1 | Category: Same Numbers, Different Rules
+Question: How much honorarium does a Professor Emeritus receive, and how does it compare to a DNP awardee?
+
+Hypothesis: Retrieval will be dominated by the larger DNP document (73 chunks vs PE's 21 chunks), so the PE honorarium may never be retrieved at all.
+
+ANSWER:
+A Professor Emeritus receives a consolidated honorarium of Rs. 200,000 per month (all-inclusive), which includes an annual increase of 5% (Source: Framework-PE.pdf).
+
+A Distinguished National Professor (DNP) awardee receives an honorarium of Rs. 200,000 on a bi-annual basis (Source: Framework-DNP.pdf).
+
+Retrieved from:
+  - Framework-DNP.pdf (score: 0.7728)
+  - Framework-DNP.pdf (score: 0.7548)
+  - Framework-PE.pdf (score: 0.7467)
+  - Framework-PE.pdf (score: 0.7386)
+  - Framework-DNP.pdf (score: 0.737)
+
+============================================================
+ID: Q2 | Category: Same Numbers, Different Rules
+Question: How is research funding scored differently in the Meritorious Professor framework versus the DNP framework?
+
+Hypothesis: Similar phrasing across documents will cause retrieval confusion, the model may blend the two scoring systems or report only one.
+
+ANSWER:
+I cannot find this information in the provided documents. While the document "Framework-MP.pdf" provides specific scoring criteria for research funding, the provided documents do not contain the scoring criteria for research funding within the DNP framework.
+
+Retrieved from:
+  - Framework-DNP.pdf (score: 0.7481)
+  - Framework-DNP.pdf (score: 0.7245)
+  - Framework-MP.pdf (score: 0.7214)
+  - Framework-DNP.pdf (score: 0.7153)
+  - Framework-DNP.pdf (score: 0.7144)
+
+============================================================
+ID: Q3 | Category: Multi-Document Reasoning
+Question: Does holding the title of HEC Distinguished National Professor provide any scoring advantage when applying for Meritorious Professor?
+
+Hypothesis: Retrieval failure, the DNP document will dominate results due to length bias, and the specific MP scoring chunk containing this rule is unlikely to rank highly.
+
+ANSWER:
+I cannot find this information in the provided documents.
+
+Retrieved from:
+  - Framework-DNP.pdf (score: 0.7859)
+  - Framework-DNP.pdf (score: 0.7776)
+  - Framework-DNP.pdf (score: 0.7649)
+  - Framework-MP.pdf (score: 0.762)
+  - Framework-DNP.pdf (score: 0.7606)
+
+============================================================
+ID: Q4 | Category: Multi-Document Reasoning
+Question: What special provisions exist for Vice Chancellors across all four HEC professor appointment frameworks?
+
+Hypothesis: Partial retrieval failure, the model will likely cover 2 of 4 documents and present an incomplete answer as complete.
+
+ANSWER:
+Regarding the appointment of Vice Chancellors, the provided documents contain the following information:
+
+*   **Professor Emeritus (PE):** In cases where Vice Chancellors join as PE at newly developed universities (other than their parent university), the HEC may invite three preferences from newly developed universities, or the Vice Chancellors may offer their services as Professor Emeritus themselves. [Source: Framework-PE.pdf]
+*   **BPS-22 Appointment:** A Professor appointed as Vice-Chancellor in BPS-22 shall be allowed a personal grade of BPS-22 as Professor after relinquishing the office of Vice-Chancellor, provided they have completed one tenure as Vice-Chancellor and were a regular Professor in a Public Sector University prior to their appointment. This personal grade does not count toward the 12.5% quota of BPS-22. [Source: Framework-MP.pdf]
+
+I cannot provide information regarding "all four HEC professor appointment frameworks" as only two documents were provided.
+
+Retrieved from:
+  - Framework-PE.pdf (score: 0.7504)
+  - Framework-MP.pdf (score: 0.7332)
+  - Framework-PE.pdf (score: 0.7294)
+  - Framework-MP.pdf (score: 0.7281)
+  - Framework-MP.pdf (score: 0.7242)
+
+============================================================
+ID: Q5 | Category: Conditional Answers
+Question: Can a Professor Emeritus apply for HEC research funding, and if so, under what conditions?
+
+Hypothesis: Generation failure, the model will confirm eligibility but omit one or both conditions, presenting an incomplete answer.
+
+ANSWER:
+Yes, a Professor Emeritus can apply for HEC research funding if they are up to the age of 65 years. The condition for this application is that they must include at least one Co-PI from the host institution.
+
+Source: Framework-PE.pdf
+
+Retrieved from:
+  - Framework-PE.pdf (score: 0.834)
+  - Framework-PE.pdf (score: 0.7804)
+  - Framework-PE.pdf (score: 0.7685)
+  - Framework-PE.pdf (score: 0.7647)
+  - Framework-PE.pdf (score: 0.7551)
+
+============================================================
+ID: Q6 | Category: Conditional Answers
+Question: Can a Professor Emeritus serve in an administrative role at a university?
+
+Hypothesis: Generation failure, the model will give a flat yes or no, losing the conditional clause about young universities.
+
+ANSWER:
+Yes, a Professor Emeritus may be asked to take up administrative positions at young universities where senior faculty are not available for such roles.
+
+Source: Framework-PE.pdf
+
+Retrieved from:
+  - Framework-PE.pdf (score: 0.7697)
+  - Framework-PE.pdf (score: 0.7644)
+  - Framework-PE.pdf (score: 0.7633)
+  - Framework-PE.pdf (score: 0.7446)
+  - Framework-PE.pdf (score: 0.7422)
+
+============================================================
+ID: Q7 | Category: Buried Eligibility Conditions
+Question: Can a professor who is 61 years old apply for the DNP award?
+
+Hypothesis: Retrieval failure, the main eligibility section will be retrieved instead of the annex, and the age condition will be missed entirely.
+
+ANSWER:
+No, a professor who is 61 years old cannot apply for the DNP award. According to the eligibility criteria, applicants must be under 60 years of age [Source: Framework-DNP.pdf].
+
+Retrieved from:
+  - Framework-DNP.pdf (score: 0.7924)
+  - Framework-DNP.pdf (score: 0.7544)
+  - Framework-DNP.pdf (score: 0.7435)
+  - Framework-DNP.pdf (score: 0.7413)
+  - Framework-DNP.pdf (score: 0.7304)
+
+============================================================
+ID: Q8 | Category: Process and Authority Confusion
+Question: What happens if the Syndicate does not endorse the Selection Board's recommendation for Meritorious Professor?
+
+Hypothesis: Retrieval confusion, DNP process chunks may rank higher than the specific MP Syndicate clause due to shared vocabulary.
+
+ANSWER:
+If the Syndicate/BoG/Equivalent body does not endorse the recommendation of the Selection Board, the case will be referred back to the Selection Board along with comments for reconsideration (Framework-MP.pdf).
+
+Retrieved from:
+  - Framework-MP.pdf (score: 0.7476)
+  - Framework-MP.pdf (score: 0.7361)
+  - Framework-MP.pdf (score: 0.7232)
+  - Framework-PE.pdf (score: 0.718)
+  - Appointment-Prof-Practice.pdf (score: 0.7074)
+
+============================================================
+ID: Q9 | Category: Process and Authority Confusion
+Question: What is the difference between the authority that confers the Meritorious Professor title versus the DNP title?
+
+Hypothesis: Retrieval failure, only DNP chunks will be retrieved due to length bias, making comparison impossible.
+
+ANSWER:
+I cannot find this information in the provided documents.
+
+Retrieved from:
+  - Framework-DNP.pdf (score: 0.7774)
+  - Framework-DNP.pdf (score: 0.7546)
+  - Framework-DNP.pdf (score: 0.7347)
+  - Framework-DNP.pdf (score: 0.7344)
+  - Framework-DNP.pdf (score: 0.7122)
+
+============================================================
+ID: Q10 | Category: Category Confusion — PoP vs Academic Track
+Question: Does a Professor of Practice need to have a PhD and research publications to be appointed?
+
+Hypothesis: Retrieval failure, MP or DNP eligibility chunks will outrank the PoP eligibility section, giving the wrong answer.
+
+ANSWER:
+I cannot find this information in the provided documents.
+
+Retrieved from:
+  - Appointment-Prof-Practice.pdf (score: 0.7877)
+  - Appointment-Prof-Practice.pdf (score: 0.7803)
+  - Appointment-Prof-Practice.pdf (score: 0.7789)
+  - Appointment-Prof-Practice.pdf (score: 0.7749)
+  - Appointment-Prof-Practice.pdf (score: 0.7498)
+
+============================================================
+ID: Q11 | Category: Category Confusion — PoP vs Academic Track
+Question: Can a Professor of Practice eventually convert to a permanent position and become eligible for the DNP or Meritorious Professor title?
+
+Hypothesis: Partial retrieval, PoP may be retrieved correctly, but the permanent employment requirement from MP and DNP is unlikely to also appear in the same top-5 results.
+
+ANSWER:
+According to the provided documents, Professor of Practice appointments may not be converted to tenure-track positions (Source: Appointment-Prof-Practice.pdf). 
+
+I cannot find information in the provided documents regarding whether a Professor of Practice can become eligible for the DNP or Meritorious Professor title.
+
+Retrieved from:
+  - Appointment-Prof-Practice.pdf (score: 0.7356)
+  - Appointment-Prof-Practice.pdf (score: 0.7351)
+  - Appointment-Prof-Practice.pdf (score: 0.733)
+  - Framework-DNP.pdf (score: 0.7235)
+  - Framework-DNP.pdf (score: 0.7137)
+
+============================================================
+ID: Q12 | Category: Temporal and Version Confusion
+Question: The DNP framework was updated in 2025 while the MP framework is from 2024. Are there any criteria that changed or conflict between the two versions, specifically around the list of recognized international awards?
+
+Hypothesis: Ambiguity failure, the model cannot determine which version takes precedence and is likely to either miss the comparison entirely or hallucinate a difference between two lists that are actually identical.
+
+ANSWER:
+I cannot find this information in the provided documents.
+
+Retrieved from:
+  - Framework-DNP.pdf (score: 0.6948)
+  - Framework-DNP.pdf (score: 0.693)
+  - Framework-DNP.pdf (score: 0.6922)
+  - Framework-DNP.pdf (score: 0.6897)
+  - Framework-DNP.pdf (score: 0.6889)
+

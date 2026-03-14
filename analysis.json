@@ -1,0 +1,50 @@
+{
+  "Q1": {
+    "failure_type": "No Failure",
+    "notes": "Both PE and DNP chunks retrieved despite DNP size advantage. PE honorarium chunk scored 0.747, strong enough to compete. Both payment structures correctly reported including frequency difference (monthly vs bi-annual)."
+  },
+  "Q2": {
+    "failure_type": "Retrieval Failure — Intra-Document Chunk Miss",
+    "notes": "MP scoring chunk retrieved correctly and reported accurately. DNP scoring data sits in a dense scoring section whose chunks did not rank in top-5. The 4 DNP chunks retrieved contain eligibility text, not scoring tables. Model correctly acknowledged the gap."
+  },
+  "Q3": {
+    "failure_type": "Retrieval Failure — Document Length Bias + Wrong Intra-Document Chunk",
+    "notes": "4 DNP chunks + 1 MP chunk retrieved. The MP chunk was the introduction section, not the scoring table containing the answer. Length bias limited MP to one slot; that slot went to the wrong section. Diverse retrieval surfaced more MP chunks but still not the scoring table chunk."
+  },
+  "Q4": {
+    "failure_type": "Partial Retrieval Failure",
+    "notes": "PE and MP VC provisions retrieved correctly. DNP and PoP not covered. Model explicitly stated it could only cover documents present in context honest and correct behaviour."
+  },
+  "Q5": {
+    "failure_type": "No Failure",
+    "notes": "All 5 chunks from PE.pdf, top score 0.834. Both conditions stated correctly: age under 65 and Co-PI requirement. Predicted generation failure did not occur."
+  },
+  "Q6": {
+    "failure_type": "Retrieval Failure — Chunk Boundary Split",
+    "notes": "CORRECTED from initial 'generation failure' classification. Chunk inspection: the negative default ('PE shall carry no formal statutory administrative positions') was physically severed by the 400-char boundary. Retrieved chunk starts mid-sentence at 'aculty is/are available.' Model answered the positive case it was given,correct behaviour. In diverse mode, Q6 regressed to complete refusal as relevant PE chunks were partially replaced by irrelevant content."
+  },
+  "Q7": {
+    "failure_type": "No Failure",
+    "notes": "Age condition buried in Annex-I correctly retrieved and stated. Predicted retrieval failure did not occur."
+  },
+  "Q8": {
+    "failure_type": "No Failure",
+    "notes": "MP Syndicate escalation clause retrieved correctly despite shared vocabulary with DNP process sections."
+  },
+  "Q9": {
+    "failure_type": "Retrieval Failure — Document Length Bias",
+    "notes": "All 5 chunks from DNP, zero MP chunks. DNP has 73 chunks vs MP's 31 — 2.4x more candidates for 5 slots. Model correctly refused half-comparison. Fixed by diversity enforcement, clearest experimental confirmation of length bias as root cause."
+  },
+  "Q10": {
+    "failure_type": "Retrieval Failure — Intra-Document Chunk Miss",
+    "notes": "CORRECTED from initial 'generation refusal' classification. Chunk inspection: all 5 retrieved PoP chunks do not contain the PhD qualification text. That text is in a different, lower-ranked chunk within the same document. Model correctly said it could not find information that was genuinely absent from its context."
+  },
+  "Q11": {
+    "failure_type": "Partial Retrieval Failure",
+    "notes": "PoP restriction and DNP permanent-employment requirement retrieved. MP equivalent not retrieved in either mode."
+  },
+  "Q12": {
+    "failure_type": "Structural Limitation — Meta-Question With No Answerable Chunks",
+    "notes": "Lowest similarity scores in dataset (0.689-0.695). No chunk in corpus was written to answer a version comparison question. Even with perfect annex retrieval, no chunk says 'this list is identical across versions.' Not directly answerable by the current pipeline would require cross-document comparison beyond the capabilities of this minimal setup."
+  }
+}

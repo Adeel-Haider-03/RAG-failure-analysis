@@ -1,0 +1,422 @@
+[
+  {
+    "id": "Q1",
+    "category": "Same Numbers, Different Rules",
+    "question": "How much honorarium does a Professor Emeritus receive, and how does it compare to a DNP awardee?",
+    "hypothesis": "Retrieval will be dominated by the larger DNP document (73 chunks vs PE's 21 chunks), so the PE honorarium may never be retrieved at all.",
+    "retrieval_mode": "standard",
+    "retrieved_chunks": [
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7728,
+        "text": "stinguished Professor awardee will receive an honorarium of Rs. 200,000/- on bi-\nannual basis for 3 years or until superannuation date, whichever is earlier. Funds for the DNP \nremunerations will be provided by HEC to the universities. \nc. It shall be the responsibility of the host university to monitor the performance of the DNP, \nwhich may be shared with HEC on annual basis.   \nd. The DNP title"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7548,
+        "text": "vements of outstanding academicians and researchers, the \ntitle of Distinguished National Professor (DNP) shall be awarded to scholars who are leaders in their \nrespective fields and have made significant contributions to their academic disciplines at national \nand international levels.  \nDNP is a prestigious title and an exceptional honor, which shall be awarded solely based on merit as \nassessed"
+      },
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7467,
+        "text": "and honor the \ndistinguished academic service and contributions of the Professor beyond superannuation. This title \nacknowledges their professional achievements, dedication, and impact on their field, while also \nencouraging their continued involvement with the institution. By bestowing this title, the institution \nbenefits from the Emeritus Professor's ongoing engagement in research, mentorship,"
+      },
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7386,
+        "text": "porarily, particularly in young universities where \nindigenous senior faculty is not yet available. \n \n5. Honorarium/Remuneration:  \n5.1. Professor Emeritus shall be entitled for financial benefits for a maximum period of 10 \nyears or up to the age of 70 years whichever is earlier and draw a consolidated amount \nof honorarium of Rs. 200,000/p.m. (all inclusive) with an annual increase of 5%. \n \nPa"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.737,
+        "text": "publication, co-supervision of a graduate student, or Co-PI in a Research Grant. \n \n2. Terms \na. The Distinguished National Professor will retain the title for life however, the associated \nfinancial benefits will cease 3 years after selection or on the date of his/her superannuation, \nwhichever is earlier. \nb. The Distinguished Professor awardee will receive an honorarium of Rs. 200,000/- on bi-"
+      }
+    ],
+    "answer": "A Professor Emeritus receives a consolidated honorarium of Rs. 200,000 per month (all-inclusive), which includes an annual increase of 5% (Source: Framework-PE.pdf).\n\nA Distinguished National Professor (DNP) awardee receives an honorarium of Rs. 200,000 on a bi-annual basis (Source: Framework-DNP.pdf)."
+  },
+  {
+    "id": "Q2",
+    "category": "Same Numbers, Different Rules",
+    "question": "How is research funding scored differently in the Meritorious Professor framework versus the DNP framework?",
+    "hypothesis": "Similar phrasing across documents will cause retrieval confusion, the model may blend the two scoring systems or report only one.",
+    "retrieval_mode": "standard",
+    "retrieved_chunks": [
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7481,
+        "text": "vements of outstanding academicians and researchers, the \ntitle of Distinguished National Professor (DNP) shall be awarded to scholars who are leaders in their \nrespective fields and have made significant contributions to their academic disciplines at national \nand international levels.  \nDNP is a prestigious title and an exceptional honor, which shall be awarded solely based on merit as \nassessed"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7245,
+        "text": "an exceptional honor, which shall be awarded solely based on merit as \nassessed against prescribed eligibility and evaluation criteria as well as upon the recommendations \nof a high-level HEC selection committee, mentioned at Section-4.    \n2. Eligibility and Evaluation Criteria \nThe title of DNP shall only be awarded to full-time permanent serving Professors with at least 05 \nyears of experience"
+      },
+      {
+        "source": "Framework-MP.pdf",
+        "score": 0.7214,
+        "text": "x of 36 and above. \n \n4.2. Research Funding (max. 13 marks):   \n \n-1 mark each for cumulative grant funding of Rs. 1.0 million as PI. \n-13 marks for a cumulative grant funding of Rs.13.0 million and above. \n \n4.3. Mentoring of Graduate Students (max. 12 marks): \n \n4.3.1 Number of PhD students supervised (max. 5 marks)  \n           \n      -1 mark for each PhD student supervised.  \n \n4.3.2 Quality o"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7153,
+        "text": "Page 1 of 13 \n \n \nFRAMEWORK FOR HEC DISTINGUISHED NATIONAL \nPROFESSOR (DNP) PROGRAM  \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \nHigher Education Commission \nIslamabad \n2025 \n \n \nPage 2 of 13 \n \nFRAMEWORK FOR HEC DISTINGUISHED NATIONAL PROFESSOR (DNP) \n1. Purposes and Principles \nFor the purpose of recognizing the achievements of outstanding academicians and researchers, the \ntitle of Distinguished"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7144,
+        "text": "s who have disciplinary proceedings pending against them or have been \npenalized on charges of plagiarism or other forms of misconduct are not eligible. \niii. There should be no adverse remarks in their ACRs during the previous five (05) years. \nb. A Professor who had received the HEC DNP award under the old framework can apply \nprovided he/she is eligible. Also, if she/he reapplies, will have to"
+      }
+    ],
+    "answer": "I cannot find this information in the provided documents. While the document \"Framework-MP.pdf\" provides specific scoring criteria for research funding, the provided documents do not contain the scoring criteria for research funding within the DNP framework."
+  },
+  {
+    "id": "Q3",
+    "category": "Multi-Document Reasoning",
+    "question": "Does holding the title of HEC Distinguished National Professor provide any scoring advantage when applying for Meritorious Professor?",
+    "hypothesis": "Retrieval failure, the DNP document will dominate results due to length bias, and the specific MP scoring chunk containing this rule is unlikely to rank highly.",
+    "retrieval_mode": "standard",
+    "retrieved_chunks": [
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7859,
+        "text": "to full-time permanent serving Professors with at least 05 \nyears of experience as Professor (BPS/Tenured/Long-term contract) at an HEC recognized public or \nprivate sector university/HEI in Pakistan.  \nThe Distinguished National Professors will retain the title for life however, the associated financial \nbenefits will cease 3 years after selection or on the date of their superannuation, whicheve"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7776,
+        "text": "an exceptional honor, which shall be awarded solely based on merit as \nassessed against prescribed eligibility and evaluation criteria as well as upon the recommendations \nof a high-level HEC selection committee, mentioned at Section-4.    \n2. Eligibility and Evaluation Criteria \nThe title of DNP shall only be awarded to full-time permanent serving Professors with at least 05 \nyears of experience"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7649,
+        "text": "s who have disciplinary proceedings pending against them or have been \npenalized on charges of plagiarism or other forms of misconduct are not eligible. \niii. There should be no adverse remarks in their ACRs during the previous five (05) years. \nb. A Professor who had received the HEC DNP award under the old framework can apply \nprovided he/she is eligible. Also, if she/he reapplies, will have to"
+      },
+      {
+        "source": "Framework-MP.pdf",
+        "score": 0.762,
+        "text": "nstitution's standards of excellence. Additionally, it enhances the institution's prestige \nby associating it with distinguished scholars, thus attracting top-tier students, faculty, and research \nopportunities.  \nThe universities may appoint Meritorious Professor on prescribed guidelines of the Higher Education \nCommission (HEC) through their statutory process. \n \n1. Provision of Posts:  \n  \n1.1."
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7606,
+        "text": "AND CONDITIONS OF THE HEC DNP AWARD \n1. Eligibility \na. Full-time permanent serving Professors (BPS/Tenured/Long-term contract) with at least 05 \nyears of experience as Professor at an HEC recognized public or private sector university/ HEI \nof Pakistan. \ni. The applicants must be under 60 years of age. \nii. Individuals who have disciplinary proceedings pending against them or have been \npenalized"
+      }
+    ],
+    "answer": "I cannot find this information in the provided documents."
+  },
+  {
+    "id": "Q4",
+    "category": "Multi-Document Reasoning",
+    "question": "What special provisions exist for Vice Chancellors across all four HEC professor appointment frameworks?",
+    "hypothesis": "Partial retrieval failure, the model will likely cover 2 of 4 documents and present an incomplete answer as complete.",
+    "retrieval_mode": "standard",
+    "retrieved_chunks": [
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7504,
+        "text": "the \nparent university or at a university other than the parent university, preferably in a \nnewly developed university. \n \nIn cases of the Vice Chancellors joining as PE at newly developed universities, other \nthan the parent universities, HEC may invite three preferences from newly developed \nuniversities and/or the interested Vice Chancellors may themselves offer their services \nas Professor Em"
+      },
+      {
+        "source": "Framework-MP.pdf",
+        "score": 0.7332,
+        "text": "office of Vice \nChancellor, provided he/she has completed one tenure as Vice Chancellor and has \nbeen a regular Professor in a Public Sector University prior to his/her appointment \nas Vice-Chancellor. The personal grade so granted to him shall not be counted \ntowards the 12.5% quota of BPS-22. \n \n \nPage 7 of 8 \n \nAnnex-I \nLIST OF INTERNATIONAL AWARDS \n \n1. Ahmed Zewail Foundation Prize for Scienc"
+      },
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7294,
+        "text": "Page 1 of 4 \n \n \nFRAMEWORK FOR APPOINTMENT OF PROFESSOR EMERITUS IN \nTHE HIGHER EDUCATION INSTITUTIONS (HEIs) \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \nHigher Education Commission \nIslamabad \n2024 \n \n \nPage 2 of 4 \n \nPurpose and Objective:  \nThe purpose and objective of appointing a Professor Emeritus is to recognize and honor the \ndistinguished academic service and contributions of the Professor"
+      },
+      {
+        "source": "Framework-MP.pdf",
+        "score": 0.7281,
+        "text": "neous: \n \n5.1. \nIn case of numbers in fraction, then 0.50 or above will be considered as 1 (e.g. 59.5 \nor above will be 60.0 whereas 59.49 or less will be 59). \n \n5.2. \nA Professor appointed as Vice-Chancellor in BPS-22 shall be allowed personal grade \nof BPS-22 as Professor after he/she relinquishes the charge of the office of Vice \nChancellor, provided he/she has completed one tenure as Vice Cha"
+      },
+      {
+        "source": "Framework-MP.pdf",
+        "score": 0.7242,
+        "text": "fessor will be considered in the Special \nSelection Board (permanent/regular members of the Selection Board, one \nrepresentative of Chairman, HEC and one representative of the Chancellor) for the \naward of BPS-22. The recommendations of the Selection Board will be placed before \nthe Syndicate/ BoG/ equivalent body for endorsement before submitting to the \nChancellor for final approval.  \n \nPage 3"
+      }
+    ],
+    "answer": "Regarding the appointment of Vice Chancellors, the provided documents contain the following information:\n\n*   **Professor Emeritus (PE):** In cases where Vice Chancellors join as PE at newly developed universities (other than their parent university), the HEC may invite three preferences from newly developed universities, or the Vice Chancellors may offer their services as Professor Emeritus themselves. [Source: Framework-PE.pdf]\n*   **BPS-22 Appointment:** A Professor appointed as Vice-Chancellor in BPS-22 shall be allowed a personal grade of BPS-22 as Professor after relinquishing the office of Vice-Chancellor, provided they have completed one tenure as Vice-Chancellor and were a regular Professor in a Public Sector University prior to their appointment. This personal grade does not count toward the 12.5% quota of BPS-22. [Source: Framework-MP.pdf]\n\nI cannot provide information regarding \"all four HEC professor appointment frameworks\" as only two documents were provided."
+  },
+  {
+    "id": "Q5",
+    "category": "Conditional Answers",
+    "question": "Can a Professor Emeritus apply for HEC research funding, and if so, under what conditions?",
+    "hypothesis": "Generation failure, the model will confirm eligibility but omit one or both conditions, presenting an incomplete answer.",
+    "retrieval_mode": "standard",
+    "retrieved_chunks": [
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.834,
+        "text": "aculty is/are available for such \npositions.  However, at young universities, where senior faculty is not available to take up \nadministrative positions, PE may be asked to take up administrative positions. \n \n4.2. Professor Emeritus up to the age of 65 years, would be eligible to apply for HEC \nresearch funding, but he/she would be required to include at least one Co-PI from the \nhost Institution"
+      },
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7804,
+        "text": "efits from the Emeritus Professor's ongoing engagement in research, mentorship, and \nintellectual activities, thereby enhancing its reputation and fostering a rich academic environment.  \nThe universities may appoint Professor Emeritus on prescribed guidelines of the Higher Education \nCommission (HEC) through their statutory process. \n \n1. Provision of Titles:  \n  \n1.1. The appointment of Professo"
+      },
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7685,
+        "text": "Page 1 of 4 \n \n \nFRAMEWORK FOR APPOINTMENT OF PROFESSOR EMERITUS IN \nTHE HIGHER EDUCATION INSTITUTIONS (HEIs) \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \nHigher Education Commission \nIslamabad \n2024 \n \n \nPage 2 of 4 \n \nPurpose and Objective:  \nThe purpose and objective of appointing a Professor Emeritus is to recognize and honor the \ndistinguished academic service and contributions of the Professor"
+      },
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7647,
+        "text": "fessor Emeritus in the concerned university may \nsubmit or get nominated by the concerned Chair or Dean in writing, preferably 06 \nmonths before the age of superannuation. \n \n4. Terms and Conditions: \n \n4.1. Whereas the conferment of PE status will be for life time, the financial benefits will be \ngiven for a maximum period of 10 years or up to the age of 70 years, whichever is \nearlier. \nThe PE i"
+      },
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7551,
+        "text": "e/she would be required to include at least one Co-PI from the \nhost Institution. \n4.3. The Professor Emeritus, at least for the period during which he/she enjoys financial \nbenefits from the University, will have the following responsibilities:  \n4.3.1. Mandatory presence on campus at least for three working days a week.  \n4.3.2. Provide guidance or continue research with faculty and/or students."
+      }
+    ],
+    "answer": "Yes, a Professor Emeritus can apply for HEC research funding if they are up to the age of 65 years. The condition for this application is that they must include at least one Co-PI from the host institution.\n\nSource: Framework-PE.pdf"
+  },
+  {
+    "id": "Q6",
+    "category": "Conditional Answers",
+    "question": "Can a Professor Emeritus serve in an administrative role at a university?",
+    "hypothesis": "Generation failure, the model will give a flat yes or no, losing the conditional clause about young universities.",
+    "retrieval_mode": "standard",
+    "retrieved_chunks": [
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7697,
+        "text": "ssor Emeritus at a newly developed \nuniversity, other than the parent university, will also not be paid the honorarium of PE \nif he/she is employed with any other university/institution/organization, or employed \nby the host university on another position within the paid tenure of Professor Emeritus."
+      },
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7644,
+        "text": "and honor the \ndistinguished academic service and contributions of the Professor beyond superannuation. This title \nacknowledges their professional achievements, dedication, and impact on their field, while also \nencouraging their continued involvement with the institution. By bestowing this title, the institution \nbenefits from the Emeritus Professor's ongoing engagement in research, mentorship,"
+      },
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7633,
+        "text": "aculty is/are available for such \npositions.  However, at young universities, where senior faculty is not available to take up \nadministrative positions, PE may be asked to take up administrative positions. \n \n4.2. Professor Emeritus up to the age of 65 years, would be eligible to apply for HEC \nresearch funding, but he/she would be required to include at least one Co-PI from the \nhost Institution"
+      },
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7446,
+        "text": "category of Vice Chancellors who \noffer their services as Professor Emeritus in newly developed universities, other than \ntheir parent university (reference Section 2). \n  \n5.3. The initial offer of appointment will be for a period of 5 years, extendable on a yearly \nbasis for the purpose of financial benefits.  \n \n5.4. The conferment of Emeritus Status shall normally be for lifetime but can be te"
+      },
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.7422,
+        "text": "e \nexperience as Professor is less than 10 years.  \nOR \n2.2. A Professor who has completed at least one tenure as a Vice-Chancellor in the public \nsector university shall be conferred the status of Professor Emeritus (PE) after attaining \nthe age of superannuation. He/she can apply for joining as Professor Emeritus at the \nparent university or at a university other than the parent university, pref"
+      }
+    ],
+    "answer": "Yes, a Professor Emeritus may be asked to take up administrative positions at young universities where senior faculty are not available for such roles.\n\nSource: Framework-PE.pdf"
+  },
+  {
+    "id": "Q7",
+    "category": "Buried Eligibility Conditions",
+    "question": "Can a professor who is 61 years old apply for the DNP award?",
+    "hypothesis": "Retrieval failure, the main eligibility section will be retrieved instead of the annex, and the age condition will be missed entirely.",
+    "retrieval_mode": "standard",
+    "retrieved_chunks": [
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7924,
+        "text": "AND CONDITIONS OF THE HEC DNP AWARD \n1. Eligibility \na. Full-time permanent serving Professors (BPS/Tenured/Long-term contract) with at least 05 \nyears of experience as Professor at an HEC recognized public or private sector university/ HEI \nof Pakistan. \ni. The applicants must be under 60 years of age. \nii. Individuals who have disciplinary proceedings pending against them or have been \npenalized"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7544,
+        "text": "vements of outstanding academicians and researchers, the \ntitle of Distinguished National Professor (DNP) shall be awarded to scholars who are leaders in their \nrespective fields and have made significant contributions to their academic disciplines at national \nand international levels.  \nDNP is a prestigious title and an exceptional honor, which shall be awarded solely based on merit as \nassessed"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7435,
+        "text": "an exceptional honor, which shall be awarded solely based on merit as \nassessed against prescribed eligibility and evaluation criteria as well as upon the recommendations \nof a high-level HEC selection committee, mentioned at Section-4.    \n2. Eligibility and Evaluation Criteria \nThe title of DNP shall only be awarded to full-time permanent serving Professors with at least 05 \nyears of experience"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7413,
+        "text": "can apply \nprovided he/she is eligible. Also, if she/he reapplies, will have to provide his/her information \nand supporting documents for the entire intervening period since the receipt of the award. \nThe university’s internal committee would have the right to examine the entire dossier in \norder to judge eligibility for the subsequent award. \nc. Candidates for DNP award will not be part of the Un"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7304,
+        "text": "idered for the \naward of title. \nX. \nThe National Level Selection Committee will review the recommendations and approve \nselection of the DNPs under the below subjects/categories. A maximum of five DNPs will be \nselected per cycle with not more than one DNP in any of the below mentioned \nsubjects/categories:  \ni. \nEducation.  \nii. \nSocial Sciences, Journalism and Information \niii. \nInformation and"
+      }
+    ],
+    "answer": "No, a professor who is 61 years old cannot apply for the DNP award. According to the eligibility criteria, applicants must be under 60 years of age [Source: Framework-DNP.pdf]."
+  },
+  {
+    "id": "Q8",
+    "category": "Process and Authority Confusion",
+    "question": "What happens if the Syndicate does not endorse the Selection Board's recommendation for Meritorious Professor?",
+    "hypothesis": "Retrieval confusion, DNP process chunks may rank higher than the specific MP Syndicate clause due to shared vocabulary.",
+    "retrieval_mode": "standard",
+    "retrieved_chunks": [
+      {
+        "source": "Framework-MP.pdf",
+        "score": 0.7476,
+        "text": "endorsement before submitting to the \nChancellor for final approval.  \n \nPage 3 of 8 \n \nIn case Syndicate/BoG/Equivalent body does not endorse recommendation of \nSelection Board, the case will be referred back to Selection Board along with its \ncomments for reconsideration. \n \n3.3. The Registrar Office shall prepare the cases of Professors in BPS-21 for the award of \nBPS-22 and present the record"
+      },
+      {
+        "source": "Framework-MP.pdf",
+        "score": 0.7361,
+        "text": "fessor will be considered in the Special \nSelection Board (permanent/regular members of the Selection Board, one \nrepresentative of Chairman, HEC and one representative of the Chancellor) for the \naward of BPS-22. The recommendations of the Selection Board will be placed before \nthe Syndicate/ BoG/ equivalent body for endorsement before submitting to the \nChancellor for final approval.  \n \nPage 3"
+      },
+      {
+        "source": "Framework-MP.pdf",
+        "score": 0.7232,
+        "text": "nstitution's standards of excellence. Additionally, it enhances the institution's prestige \nby associating it with distinguished scholars, thus attracting top-tier students, faculty, and research \nopportunities.  \nThe universities may appoint Meritorious Professor on prescribed guidelines of the Higher Education \nCommission (HEC) through their statutory process. \n \n1. Provision of Posts:  \n  \n1.1."
+      },
+      {
+        "source": "Framework-PE.pdf",
+        "score": 0.718,
+        "text": ". The conferment of Emeritus Status shall normally be for lifetime but can be terminated \nif the Professor so desired or the Syndicate terminates by ¾ majority on grounds of \ninefficiency, moral turpitude or physical or mental incapacity or gross misconduct. \n \n5.5. During the paid tenure of Professor Emeritus, he/she will not get financial benefits \nfrom any other university/institution/organizat"
+      },
+      {
+        "source": "Appointment-Prof-Practice.pdf",
+        "score": 0.7074,
+        "text": "or Selection: \n• The Higher Education Institution (HEI) may invite applications from the eminent \nserving/retired experts for the position of Professor of Practice through an advertisement or \nhead hunt who qualify the laid down criteria.  \n• The Selection Board, after interviewing the eligible candidates, may submit its \nrecommendations to the Syndicate or Statutory Body of the HEI for his/her en"
+      }
+    ],
+    "answer": "If the Syndicate/BoG/Equivalent body does not endorse the recommendation of the Selection Board, the case will be referred back to the Selection Board along with comments for reconsideration (Framework-MP.pdf)."
+  },
+  {
+    "id": "Q9",
+    "category": "Process and Authority Confusion",
+    "question": "What is the difference between the authority that confers the Meritorious Professor title versus the DNP title?",
+    "hypothesis": "Retrieval failure, only DNP chunks will be retrieved due to length bias, making comparison impossible.",
+    "retrieval_mode": "standard",
+    "retrieved_chunks": [
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7774,
+        "text": "vements of outstanding academicians and researchers, the \ntitle of Distinguished National Professor (DNP) shall be awarded to scholars who are leaders in their \nrespective fields and have made significant contributions to their academic disciplines at national \nand international levels.  \nDNP is a prestigious title and an exceptional honor, which shall be awarded solely based on merit as \nassessed"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7546,
+        "text": "an exceptional honor, which shall be awarded solely based on merit as \nassessed against prescribed eligibility and evaluation criteria as well as upon the recommendations \nof a high-level HEC selection committee, mentioned at Section-4.    \n2. Eligibility and Evaluation Criteria \nThe title of DNP shall only be awarded to full-time permanent serving Professors with at least 05 \nyears of experience"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7347,
+        "text": "idered for the \naward of title. \nX. \nThe National Level Selection Committee will review the recommendations and approve \nselection of the DNPs under the below subjects/categories. A maximum of five DNPs will be \nselected per cycle with not more than one DNP in any of the below mentioned \nsubjects/categories:  \ni. \nEducation.  \nii. \nSocial Sciences, Journalism and Information \niii. \nInformation and"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7344,
+        "text": "of the DNP, \nwhich may be shared with HEC on annual basis.   \nd. The DNP title may not be terminated from the holder except in case of proven charges of \ngross misconduct or plagiarism, which will require a process to follow. \n \n3. Selection Procedure \na. All names will be submitted by the universities to HEC after a transparent scrutiny process.  \nb. The initial screening will take place at the"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7122,
+        "text": "its impact.  \nii. Services rendered at the community/university level and its impact. \nIV. \nEach participating university will set up a permanent/Standing selection committee, to be \nchaired by the Vice Chancellor including the Registrar, Director QEC, up to two existing DNPs \nand up to three senior Deans to review the applications and recommend one candidate for \nthe award of DNP.   \nPage 9 of 1"
+      }
+    ],
+    "answer": "I cannot find this information in the provided documents."
+  },
+  {
+    "id": "Q10",
+    "category": "Category Confusion — PoP vs Academic Track",
+    "question": "Does a Professor of Practice need to have a PhD and research publications to be appointed?",
+    "hypothesis": "Retrieval failure, MP or DNP eligibility chunks will outrank the PoP eligibility section, giving the wrong answer.",
+    "retrieval_mode": "standard",
+    "retrieved_chunks": [
+      {
+        "source": "Appointment-Prof-Practice.pdf",
+        "score": 0.7877,
+        "text": "intments at and above the \ndepartment chair level.  \n \nThe appointed Professor of Practice is expected to follow HEI’s policies and the HEIs are \nrequired to address all the appointment matters/terms and conditions in the contract. \n \nUnder these policy guidelines, universities/HEIs may appoint only a ‘Professor of Practice,’ \nwith no provision for the appointment of Assistant or Associate Profess"
+      },
+      {
+        "source": "Appointment-Prof-Practice.pdf",
+        "score": 0.7803,
+        "text": "ctice,’ \nwith no provision for the appointment of Assistant or Associate Professors of Practice."
+      },
+      {
+        "source": "Appointment-Prof-Practice.pdf",
+        "score": 0.7789,
+        "text": "Universities across the \nworld have adopted approaches to provide students with progressive professional instructions from \nfaculty having extensive practical experience in the profession. One such strategy being practiced is \nincluding Professors of Practice in the faculty of professional degree programs who bring substantial \nprofessional experience and industry/sectoral insights to the academi"
+      },
+      {
+        "source": "Appointment-Prof-Practice.pdf",
+        "score": 0.7749,
+        "text": "intment/Engagement \nProfessionals who are distinguished practitioners, demonstrate eminence in their areas of \nexpertise and have sustained accomplishments can be hired as Professor of Practice within the HEIs. \nThe following criteria shall be considered for their selection: \n \ni. \nProfessional Experience: Minimum of 15 years of professional experience in a relevant \nindustry/field.  \nIn case a pe"
+      },
+      {
+        "source": "Appointment-Prof-Practice.pdf",
+        "score": 0.7498,
+        "text": "cts or provide consultancy services alongside regular faculty \nmembers. \nThe concerned HEI may assign any other role/task to the Professor of Practice, through the \napproval of the Vice Chancellor/Head of the Institute, that contributes towards achievement of the \nobjective anticipated from the role. \n \n4. \nProcedure for Selection: \n• The Higher Education Institution (HEI) may invite applications"
+      }
+    ],
+    "answer": "I cannot find this information in the provided documents."
+  },
+  {
+    "id": "Q11",
+    "category": "Category Confusion — PoP vs Academic Track",
+    "question": "Can a Professor of Practice eventually convert to a permanent position and become eligible for the DNP or Meritorious Professor title?",
+    "hypothesis": "Partial retrieval, PoP may be retrieved correctly, but the permanent employment requirement from MP and DNP is unlikely to also appear in the same top-5 results.",
+    "retrieval_mode": "standard",
+    "retrieved_chunks": [
+      {
+        "source": "Appointment-Prof-Practice.pdf",
+        "score": 0.7356,
+        "text": "ctice,’ \nwith no provision for the appointment of Assistant or Associate Professors of Practice."
+      },
+      {
+        "source": "Appointment-Prof-Practice.pdf",
+        "score": 0.7351,
+        "text": "professional incompetence, serious personal or \nprofessional misconduct. A notice period of 30 days will be allowed by the HEIs in cases \nof dismissal or resignation.  \nThe Professor of Practice appointments may not be converted to tenure-track positions \nand they are also not eligible for academic administrative appointments at and above the \ndepartment chair level.  \n \nThe appointed Professor o"
+      },
+      {
+        "source": "Appointment-Prof-Practice.pdf",
+        "score": 0.733,
+        "text": "intments at and above the \ndepartment chair level.  \n \nThe appointed Professor of Practice is expected to follow HEI’s policies and the HEIs are \nrequired to address all the appointment matters/terms and conditions in the contract. \n \nUnder these policy guidelines, universities/HEIs may appoint only a ‘Professor of Practice,’ \nwith no provision for the appointment of Assistant or Associate Profess"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7235,
+        "text": "an exceptional honor, which shall be awarded solely based on merit as \nassessed against prescribed eligibility and evaluation criteria as well as upon the recommendations \nof a high-level HEC selection committee, mentioned at Section-4.    \n2. Eligibility and Evaluation Criteria \nThe title of DNP shall only be awarded to full-time permanent serving Professors with at least 05 \nyears of experience"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.7137,
+        "text": "vements of outstanding academicians and researchers, the \ntitle of Distinguished National Professor (DNP) shall be awarded to scholars who are leaders in their \nrespective fields and have made significant contributions to their academic disciplines at national \nand international levels.  \nDNP is a prestigious title and an exceptional honor, which shall be awarded solely based on merit as \nassessed"
+      }
+    ],
+    "answer": "According to the provided documents, Professor of Practice appointments may not be converted to tenure-track positions (Source: Appointment-Prof-Practice.pdf). \n\nI cannot find information in the provided documents regarding whether a Professor of Practice can become eligible for the DNP or Meritorious Professor title."
+  },
+  {
+    "id": "Q12",
+    "category": "Temporal and Version Confusion",
+    "question": "The DNP framework was updated in 2025 while the MP framework is from 2024. Are there any criteria that changed or conflict between the two versions, specifically around the list of recognized international awards?",
+    "hypothesis": "Ambiguity failure, the model cannot determine which version takes precedence and is likely to either miss the comparison entirely or hallucinate a difference between two lists that are actually identical.",
+    "retrieval_mode": "standard",
+    "retrieved_chunks": [
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.6948,
+        "text": "Page 1 of 13 \n \n \nFRAMEWORK FOR HEC DISTINGUISHED NATIONAL \nPROFESSOR (DNP) PROGRAM  \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \nHigher Education Commission \nIslamabad \n2025 \n \n \nPage 2 of 13 \n \nFRAMEWORK FOR HEC DISTINGUISHED NATIONAL PROFESSOR (DNP) \n1. Purposes and Principles \nFor the purpose of recognizing the achievements of outstanding academicians and researchers, the \ntitle of Distinguished"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.693,
+        "text": "can apply \nprovided he/she is eligible. Also, if she/he reapplies, will have to provide his/her information \nand supporting documents for the entire intervening period since the receipt of the award. \nThe university’s internal committee would have the right to examine the entire dossier in \norder to judge eligibility for the subsequent award. \nc. Candidates for DNP award will not be part of the Un"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.6922,
+        "text": "or the subsequent award. \nc. Candidates for DNP award will not be part of the University’s Selection Committee. Similarly, \nConflict of Interest if any, has to be declared by the selection committee members that the \ncandidate has not collaborated with any member, at least in the last 5 years, either in terms \nof joint publication, co-supervision of a graduate student, or Co-PI in a Research Grant"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.6897,
+        "text": "idered for the \naward of title. \nX. \nThe National Level Selection Committee will review the recommendations and approve \nselection of the DNPs under the below subjects/categories. A maximum of five DNPs will be \nselected per cycle with not more than one DNP in any of the below mentioned \nsubjects/categories:  \ni. \nEducation.  \nii. \nSocial Sciences, Journalism and Information \niii. \nInformation and"
+      },
+      {
+        "source": "Framework-DNP.pdf",
+        "score": 0.6889,
+        "text": "vements of outstanding academicians and researchers, the \ntitle of Distinguished National Professor (DNP) shall be awarded to scholars who are leaders in their \nrespective fields and have made significant contributions to their academic disciplines at national \nand international levels.  \nDNP is a prestigious title and an exceptional honor, which shall be awarded solely based on merit as \nassessed"
+      }
+    ],
+    "answer": "I cannot find this information in the provided documents."
+  }
+]
