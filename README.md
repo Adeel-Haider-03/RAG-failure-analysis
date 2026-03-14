@@ -24,7 +24,7 @@ Four publicly available HEC policy documents placed in the `docs/` folder:
 | `Framework-DNP.pdf`             | Distinguished National Professor | 2025 | 73     |
 | `Appointment-Prof-Practice.pdf` | Professor of Practice            | 2025 | 38     |
 
-These documents were chosen because they share overlapping vocabulary, cross-reference each other, and describe different rules using similar language — ideal conditions for surfacing RAG failures.
+These documents share overlapping vocabulary and similar policy structures while defining different eligibility rules. This makes them useful for testing retrieval confusion and cross-document reasoning failures.
 
 ---
 
@@ -79,7 +79,7 @@ python run_questions.py
 # Diversity-enforced retrieval only
 python run_questions.py --diverse
 
-# Both modes, with side-by-side comparison
+# Both modes
 python run_questions.py --both
 ```
 
@@ -94,7 +94,7 @@ Results are saved to the `results/` folder as `.json` and `.txt` files.
 | **Standard** | Global top-5 by cosine similarity | Fast, simple — but longer documents dominate |
 | **Diverse**  | Max 2 chunks per source document  | Forces cross-document representation         |
 
-The DNP document (73 chunks) is 3.5× longer than the PE document (21 chunks). In standard retrieval, it statistically dominates the top-5 results regardless of semantic relevance. This is the main failure mechanism observed in this project.
+The DNP document (73 chunks) is 3.5x longer than the PE document (21 chunks). In standard retrieval, the longer document has more chunks competing for the top-k positions, increasing the probability that it dominates the retrieved set even when other documents are relevant.
 
 ---
 
@@ -104,11 +104,14 @@ The DNP document (73 chunks) is 3.5× longer than the PE document (21 chunks). I
 ├── docs/                         # PDF corpus (not included in repo)
 ├── index/                        # Saved embeddings (auto-generated, gitignored)
 ├── results/                      # Query outputs (auto-generated, gitignored)
+├── example_outputs/              # Actual results from both retrieval runs
+├── screenshots/                  # UI screenshots
 ├── rag_pipeline.py               # Core RAG logic — read this first
 ├── run_questions.py              # Batch runner for all 12 questions
 ├── app.py                        # Flask server for the web UI
 ├── ui.html                       # Web interface
 ├── questions.json                # 12 designed questions with hypotheses
+├── analysis.json                 # Manual failure annotations per question
 ├── requirements.txt
 └── README.md
 ```
@@ -131,12 +134,28 @@ These omissions are intentional. Each one is a potential fix for a specific fail
 
 12 questions across 6 failure categories, each designed to trigger a specific RAG weakness:
 
-| ID      | Category                             | Target Weakness                                 |
-| ------- | ------------------------------------ | ----------------------------------------------- |
-| Q1–Q2   | Same Numbers, Different Rules        | Numerical confusion across documents            |
-| Q3–Q4   | Multi-Document Reasoning             | Cross-document synthesis                        |
-| Q5–Q6   | Conditional Answers                  | Multi-clause logic dropped by generation        |
-| Q7      | Buried Eligibility                   | Annex content ranked below body text            |
-| Q8–Q9   | Process & Authority Confusion        | Similar process language, different authorities |
-| Q10–Q11 | Category Confusion (PoP vs Academic) | Practitioner vs academic track                  |
-| Q12     | Temporal & Version Confusion         | No mechanism for document versioning            |
+| ID      | Category                             | Target Weakness                                                                |
+| ------- | ------------------------------------ | ------------------------------------------------------------------------------ |
+| Q1–Q2   | Same Numbers, Different Rules        | Same values, different meaning across documents                                |
+| Q3–Q4   | Multi-Document Reasoning             | Cross-document synthesis                                                       |
+| Q5–Q6   | Conditional Answers                  | Multi-clause conditions — conditional structure vulnerable to chunk boundaries |
+| Q7      | Buried Eligibility                   | Annex content ranked below body text                                           |
+| Q8–Q9   | Process & Authority Confusion        | Similar process language, different authorities                                |
+| Q10–Q11 | Category Confusion (PoP vs Academic) | Practitioner vs academic track                                                 |
+| Q12     | Temporal & Version Confusion         | No mechanism for document versioning                                           |
+
+---
+
+## Key Findings
+
+- **Generation errors were not observed in this experiment** — failures were attributable to retrieval rather than generation behaviour
+- **Fixed-size chunking was the dominant failure cause** — chunk boundary splits, intra-document chunk misses, and document length bias all stem from 400-character slices with no semantic awareness
+- **Q12 was not directly answerable by this pipeline** — it requires cross-document comparison that a standard single-pass RAG setup does not perform
+- **Diversity enforcement fixed some failures and created others** — Q9 was corrected, Q6 regressed, showing no single retrieval configuration is optimal across all question types
+
+---
+
+## UI Screenshots
+
+![Standard Retrieval](example_outputs/screenshots/Q3%20standard%20retrieval.png)
+![Diverse Retrieval](example_outputs/screenshots/Q3%20diverse%20retrieval.png)
