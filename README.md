@@ -105,7 +105,7 @@ The DNP document (73 chunks) is 3.5x longer than the PE document (21 chunks). In
 ├── index/                        # Saved embeddings (auto-generated, gitignored)
 ├── results/                      # Query outputs (auto-generated, gitignored)
 ├── example_outputs/              # Actual results from both retrieval runs
-├── screenshots/                  # UI screenshots
+    ├── screenshots/              # UI screenshots
 ├── rag_pipeline.py               # Core RAG logic — read this first
 ├── run_questions.py              # Batch runner for all 12 questions
 ├── app.py                        # Flask server for the web UI
@@ -158,4 +158,5 @@ These omissions are intentional. Each one is a potential fix for a specific fail
 ## UI Screenshots
 
 ![Standard Retrieval](example_outputs/screenshots/Q3%20standard%20retrieval.png)
+
 ![Diverse Retrieval](example_outputs/screenshots/Q3%20diverse%20retrieval.png)
