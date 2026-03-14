@@ -148,15 +148,24 @@ These omissions are intentional. Each one is a potential fix for a specific fail
 
 ## Key Findings
 
-- **Generation errors were not observed in this experiment** — failures were attributable to retrieval rather than generation behaviour
-- **Fixed-size chunking was the dominant failure cause** — chunk boundary splits, intra-document chunk misses, and document length bias all stem from 400-character slices with no semantic awareness
-- **Q12 was not directly answerable by this pipeline** — it requires cross-document comparison that a standard single-pass RAG setup does not perform
-- **Diversity enforcement fixed some failures and created others** — Q9 was corrected, Q6 regressed, showing no single retrieval configuration is optimal across all question types
+- **No clear generation errors were observed in this experiment.** Incorrect answers were explainable by limitations in retrieval and chunking rather than the model’s reasoning.
+
+- **Fixed-size chunking was the dominant failure cause.** Chunk boundary splits, intra-document chunk misses, and document length bias were all amplified by the use of fixed 400-character chunks without semantic boundaries.
+
+- **Q12 was not directly answerable by this pipeline.** It requires cross-document comparison, which a standard single-pass RAG setup does not perform.
+
+- **Diversity enforcement fixed some failures and created others.** Q9 was corrected while Q6 regressed, showing that no single retrieval configuration performed best across all question types in this experiment.
 
 ---
 
 ## UI Screenshots
 
+_Standard Retrieval_
 ![Standard Retrieval](example_outputs/screenshots/Q3%20standard%20retrieval.png)
 
+_Diverse Retrieval_
 ![Diverse Retrieval](example_outputs/screenshots/Q3%20diverse%20retrieval.png)
+
+## License
+
+This project is for academic coursework and research demonstration purposes.
