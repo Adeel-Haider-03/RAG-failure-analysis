@@ -9,7 +9,7 @@ A structured failure analysis of a minimal RAG (Retrieval-Augmented Generation) 
 ## Purpose
 
 This project does **not** try to build a strong RAG system.  
-The goal is to analyze **where and why** RAG systems fail — and whether those failures are fixable or structural.
+The goal is to analyze **where and why** RAG systems fail and whether those failures are fixable or structural.
 
 ---
 
@@ -89,13 +89,15 @@ Results are saved to the `results/` folder as `.json` and `.txt` files.
 
 > **Note:** `run_questions.py` reads questions from `questions.json`, which must be present in the project folder. Each entry requires at minimum an `"id"`, `"question"`, `"category"`, and `"hypothesis"` field. The provided `questions.json` already contains all 12 questions in the correct format.
 
+> `analysis.json` is a standalone research artifact, it is not read by any script. It contains manual failure classifications added after reviewing the pipeline output. Each entry uses the question `"id"` as the key and contains `"failure_type"` and `"notes"` fields. It exists for documentation and analysis purposes only.
+
 ---
 
 ## The Two Retrieval Modes
 
 | Mode         | How it works                      | When it helps                                |
 | ------------ | --------------------------------- | -------------------------------------------- |
-| **Standard** | Global top-5 by cosine similarity | Fast, simple — but longer documents dominate |
+| **Standard** | Global top-5 by cosine similarity | Fast, simple but longer documents dominate   |
 | **Diverse**  | Max 2 chunks per source document  | Forces cross-document representation         |
 
 The DNP document (73 chunks) is 3.5x longer than the PE document (21 chunks). In standard retrieval, the longer document has more chunks competing for the top-k positions, increasing the probability that it dominates the retrieved set even when other documents are relevant.
@@ -136,13 +138,13 @@ These omissions are intentional. Each one is a potential fix for a specific fail
 
 ## Questions
 
-12 questions across 6 failure categories, each designed to trigger a specific RAG weakness:
+12 questions across 7 failure categories, each designed to trigger a specific RAG weakness:
 
 | ID      | Category                             | Target Weakness                                                                |
 | ------- | ------------------------------------ | ------------------------------------------------------------------------------ |
 | Q1–Q2   | Same Numbers, Different Rules        | Same values, different meaning across documents                                |
 | Q3–Q4   | Multi-Document Reasoning             | Cross-document synthesis                                                       |
-| Q5–Q6   | Conditional Answers                  | Multi-clause conditions — conditional structure vulnerable to chunk boundaries |
+| Q5–Q6   | Conditional Answers                  | Multi-clause conditions, conditional structure vulnerable to chunk boundaries  |
 | Q7      | Buried Eligibility                   | Annex content ranked below body text                                           |
 | Q8–Q9   | Process & Authority Confusion        | Similar process language, different authorities                                |
 | Q10–Q11 | Category Confusion (PoP vs Academic) | Practitioner vs academic track                                                 |
@@ -159,6 +161,8 @@ These omissions are intentional. Each one is a potential fix for a specific fail
 - **Q12 was not directly answerable by this pipeline.** It requires cross-document comparison, which a standard single-pass RAG setup does not perform.
 
 - **Diversity enforcement fixed some failures and created others.** Q9 was corrected while Q6 regressed, showing that no single retrieval configuration performed best across all question types in this experiment.
+
+Manual annotations for each question are documented in `analysis.json`
 
 ---
 
