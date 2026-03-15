@@ -87,6 +87,8 @@ python run_questions.py --both
 
 Results are saved to the `results/` folder as `.json` and `.txt` files.
 
+> **Note:** `run_questions.py` reads questions from `questions.json`, which must be present in the project folder. Each entry requires at minimum an `"id"`, `"question"`, `"category"`, and `"hypothesis"` field. The provided `questions.json` already contains all 12 questions in the correct format.
+
 ---
 
 ## The Two Retrieval Modes
