@@ -107,11 +107,11 @@ The DNP document (73 chunks) is 3.5x longer than the PE document (21 chunks). In
 ## Project Structure
 
 ```
-├── docs/                         # PDF corpus (not included in repo)
+├── docs/                         # PDF corpus
 ├── index/                        # Saved embeddings (auto-generated, gitignored)
 ├── results/                      # Query outputs (auto-generated, gitignored)
 ├── example_outputs/              # Actual results from both retrieval runs
-    ├── screenshots/              # UI screenshots
+│   └── screenshots/              # UI screenshots
 ├── rag_pipeline.py               # Core RAG logic — read this first
 ├── run_questions.py              # Batch runner for all 12 questions
 ├── app.py                        # Flask server for the web UI
