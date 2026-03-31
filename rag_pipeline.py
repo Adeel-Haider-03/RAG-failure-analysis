@@ -1,55 +1,54 @@
 """
 rag_pipeline.py
 ---------------
-Core RAG (Retrieval-Augmented Generation) pipeline.
+Core RAG pipeline with two chunking strategies:
 
-What this file does, step by step:
-  1. Read PDF documents from the docs/ folder
-  2. Split each document into small text chunks
-  3. Convert every chunk into a vector (embedding) using Gemini
-  4. Save the vectors to disk so we don't recompute them every run
-  5. When a question is asked:
-     a. Convert the question into a vector
-     b. Find the most similar chunk vectors (retrieval)
-     c. Send those chunks + the question to Gemini (generation)
-     d. Return the answer
+  1. split_into_chunks()         — original fixed-size character chunking (400 chars, 80 overlap)
+  2. split_into_sentences()      — improved sentence-aware chunking (groups complete sentences)
+
+The sentence-aware chunker was added as Part A Fix 1 to address the chunk boundary split
+failure observed in Q6, where the 400-character boundary severed a conditional sentence
+mid-clause, removing the word "not" from the retrieved context.
+
+Both chunkers are available so before/after comparisons can be run with the same pipeline.
 """
 
 import os
 import json
 import time
 import numpy as np
-import fitz  # PyMuPDF — reads PDF files
+import fitz  # PyMuPDF
 from pathlib import Path
 from google import genai
 
 
 # ─────────────────────────────────────────────────────────────────
-# Configuration — change these if needed
+# Configuration
 # ─────────────────────────────────────────────────────────────────
 
-CHUNK_SIZE    = 400   # How many characters per chunk
-CHUNK_OVERLAP = 80    # How many characters overlap between consecutive chunks
-TOP_K         = 5     # How many chunks to retrieve per question
+CHUNK_SIZE        = 400   # characters — used by fixed-size chunker only
+CHUNK_OVERLAP     = 80    # characters — used by fixed-size chunker only
+SENTENCE_CHUNK_SIZE = 600 # approximate max characters per sentence-aware chunk
+TOP_K             = 5
 
-EMBEDDING_MODEL  = "gemini-embedding-001"       # Converts text to vectors
-GENERATION_MODEL = "gemini-3.1-flash-lite-preview"           # Generates answers
+EMBEDDING_MODEL  = "gemini-embedding-001"
+GENERATION_MODEL = "gemini-3.1-flash-lite-preview"
 
-# The instruction given to the generation model
 SYSTEM_PROMPT = """You are a helpful assistant that answers questions based ONLY
 on the provided context documents. If the answer is not in the context, say:
 "I cannot find this information in the provided documents."
 Do not use any external knowledge. Be precise and cite which document your answer
 comes from."""
 
+
 # ─────────────────────────────────────────────────────────────────
 # Step 0: Setup
 # ─────────────────────────────────────────────────────────────────
 
-_client = None  # Gemini client, created once in configure()
+_client = None
 
 def configure(api_key: str):
-    """Initialize the Gemini client with your API key."""
+    """Initialize the Gemini client."""
     global _client
     _client = genai.Client(api_key=api_key)
     print("Gemini client initialized.")
@@ -59,33 +58,42 @@ def configure(api_key: str):
 # Step 1: Load PDFs
 # ─────────────────────────────────────────────────────────────────
 
-def load_documents(docs_folder: str = "docs") -> list[dict]:
+def load_documents(docs_folder: str = "docs",
+                   chunking: str = "fixed") -> list[dict]:
     """
-    Read all PDF files from the docs/ folder.
-    Returns a list of chunks, each with: text, source filename, chunk index.
+    Read all PDF files from the docs/ folder and split into chunks.
+
+    Args:
+        docs_folder: path to folder containing PDF files
+        chunking:    "fixed"    — original 400-char fixed-size chunking
+                     "sentence" — improved sentence-aware chunking
+
+    Returns:
+        List of chunk dicts with keys: text, source, index
     """
     folder = Path(docs_folder)
     pdf_files = sorted(folder.glob("*.pdf"))
 
     if not pdf_files:
-        raise FileNotFoundError(f"No PDF files found in '{docs_folder}/' folder.")
+        raise FileNotFoundError(f"No PDF files found in '{docs_folder}/'")
 
     print(f"Found {len(pdf_files)} PDF(s): {[f.name for f in pdf_files]}")
+    print(f"Chunking strategy: {chunking}")
 
     all_chunks = []
-
     for pdf_path in pdf_files:
         print(f"  Processing: {pdf_path.name}")
-
-        # Extract all text from the PDF
         doc = fitz.open(pdf_path)
         full_text = ""
         for page in doc:
             full_text += page.get_text()
         doc.close()
 
-        # Split text into overlapping chunks
-        chunks = split_into_chunks(full_text, pdf_path.name)
+        if chunking == "sentence":
+            chunks = split_into_sentences(full_text, pdf_path.name)
+        else:
+            chunks = split_into_chunks(full_text, pdf_path.name)
+
         all_chunks.extend(chunks)
         print(f"    -> {len(chunks)} chunks created")
 
@@ -93,29 +101,85 @@ def load_documents(docs_folder: str = "docs") -> list[dict]:
     return all_chunks
 
 
+# ─────────────────────────────────────────────────────────────────
+# Chunking Strategy 1: Fixed-size character chunking (original)
+# ─────────────────────────────────────────────────────────────────
+
 def split_into_chunks(text: str, source: str) -> list[dict]:
     """
-    Split a long text string into overlapping fixed-size chunks.
+    Original fixed-size character chunking.
+    Splits text every CHUNK_SIZE characters with CHUNK_OVERLAP overlap.
 
-    Why overlap? If an answer falls at the boundary between two chunks,
-    the overlap ensures neither chunk loses that information.
+    Known limitation: chunk boundaries fall at arbitrary character positions,
+    which can split sentences mid-clause. This caused the Q6 failure where
+    the word 'not' in a negative conditional was severed from its clause.
     """
     chunks = []
     start = 0
-
     while start < len(text):
         end = start + CHUNK_SIZE
         chunk_text = text[start:end].strip()
-
-        if chunk_text:  # Skip empty chunks
+        if chunk_text:
             chunks.append({
-                "text": chunk_text,
+                "text":   chunk_text,
                 "source": source,
-                "index": len(chunks)
+                "index":  len(chunks)
             })
-
-        # Move forward by (CHUNK_SIZE - CHUNK_OVERLAP) to create overlap
         start += CHUNK_SIZE - CHUNK_OVERLAP
+    return chunks
+
+
+# ─────────────────────────────────────────────────────────────────
+# Chunking Strategy 2: Sentence-aware chunking (improved)
+# ─────────────────────────────────────────────────────────────────
+
+def split_into_sentences(text: str, source: str) -> list[dict]:
+    """
+    Improved sentence-aware chunking.
+
+    Groups complete sentences into chunks up to SENTENCE_CHUNK_SIZE characters.
+    Never splits a sentence mid-clause — each chunk boundary falls at a sentence end.
+
+    This directly addresses the Q6 failure: the conditional sentence
+    'PE shall NOT carry formal statutory administrative positions at a university
+    where senior faculty is/are available... However, at young universities...'
+    will now stay in a single chunk rather than being split between two.
+
+    Uses simple rule-based sentence splitting to avoid external dependencies.
+    Splits on '. ', '? ', '! ', and newlines followed by capital letters.
+    """
+    import re
+
+    # Split into sentences using punctuation boundaries
+    # Pattern: split after . ! ? followed by space and capital letter, or after newlines
+    raw_sentences = re.split(r'(?<=[.!?])\s+(?=[A-Z])|(?<=\n)\s*(?=[A-Z])', text)
+
+    # Clean empty sentences
+    sentences = [s.strip() for s in raw_sentences if s.strip()]
+
+    chunks = []
+    current_chunk = ""
+
+    for sentence in sentences:
+        # If adding this sentence would exceed the limit and we already have content,
+        # save the current chunk and start a new one
+        if current_chunk and len(current_chunk) + len(sentence) + 1 > SENTENCE_CHUNK_SIZE:
+            chunks.append({
+                "text":   current_chunk.strip(),
+                "source": source,
+                "index":  len(chunks)
+            })
+            current_chunk = sentence
+        else:
+            current_chunk = current_chunk + " " + sentence if current_chunk else sentence
+
+    # Save the last chunk
+    if current_chunk.strip():
+        chunks.append({
+            "text":   current_chunk.strip(),
+            "source": source,
+            "index":  len(chunks)
+        })
 
     return chunks
 
@@ -125,14 +189,7 @@ def split_into_chunks(text: str, source: str) -> list[dict]:
 # ─────────────────────────────────────────────────────────────────
 
 def embed_texts(texts: list[str]) -> np.ndarray:
-    """
-    Convert a list of text strings into vectors using the Gemini embedding model.
-    Returns a 2D numpy array of shape (len(texts), 3072).
-
-    What is an embedding/vector?
-    A list of 3072 numbers that represents the *meaning* of the text.
-    Texts with similar meanings produce vectors that are mathematically close.
-    """
+    """Convert a list of text strings into embedding vectors."""
     result = _client.models.embed_content(
         model=EMBEDDING_MODEL,
         contents=texts
@@ -142,10 +199,7 @@ def embed_texts(texts: list[str]) -> np.ndarray:
 
 
 def build_index(chunks: list[dict]) -> tuple[list[dict], np.ndarray]:
-    """
-    Embed all chunks and build the search index.
-    Processes in batches of 50 with 60-second pauses to respect API rate limits.
-    """
+    """Embed all chunks and build the search index."""
     texts = [c["text"] for c in chunks]
     print(f"\nBuilding embedding index for {len(texts)} chunks...")
 
@@ -157,19 +211,17 @@ def build_index(chunks: list[dict]) -> tuple[list[dict], np.ndarray]:
         print(f"  Embedding chunks {i+1}–{min(i+batch_size, len(texts))}...")
         batch_embeddings = embed_texts(batch)
         all_embeddings.append(batch_embeddings)
-
-        # Pause between batches to avoid hitting the free-tier rate limit (100/min)
         if i + batch_size < len(texts):
             print("  Waiting 60s for rate limit...")
             time.sleep(60)
 
     embeddings = np.vstack(all_embeddings)
-    print(f"Index built: {embeddings.shape[0]} vectors of dimension {embeddings.shape[1]}")
+    print(f"Index built: {embeddings.shape[0]} vectors of dim {embeddings.shape[1]}")
     return chunks, embeddings
 
 
 def save_index(chunks: list[dict], embeddings: np.ndarray, path: str = "index"):
-    """Save the index to disk. Avoids re-embedding on every run."""
+    """Save index to disk."""
     Path(path).mkdir(exist_ok=True)
     np.save(f"{path}/embeddings.npy", embeddings)
     with open(f"{path}/chunks.json", "w", encoding="utf-8") as f:
@@ -191,23 +243,14 @@ def load_index(path: str = "index") -> tuple[list[dict], np.ndarray]:
 # ─────────────────────────────────────────────────────────────────
 
 def cosine_similarity(query_vec: np.ndarray, doc_vecs: np.ndarray) -> np.ndarray:
-    """
-    Measure how similar the query vector is to each chunk vector.
-
-    Cosine similarity measures the angle between two vectors (0 to 1 scale).
-    1.0 = identical direction (very similar meaning)
-    0.0 = completely unrelated
-
-    We use this instead of simple keyword search because it works even when
-    the question and the answer use different words.
-    """
+    """Cosine similarity between query vector and all chunk vectors."""
     query_norm = query_vec / (np.linalg.norm(query_vec) + 1e-10)
     doc_norms  = doc_vecs  / (np.linalg.norm(doc_vecs, axis=1, keepdims=True) + 1e-10)
     return doc_norms @ query_norm
 
 
 def embed_query(query: str) -> np.ndarray:
-    """Embed a single query string into a vector."""
+    """Embed a single query string."""
     result = _client.models.embed_content(
         model=EMBEDDING_MODEL,
         contents=[query]
@@ -216,18 +259,14 @@ def embed_query(query: str) -> np.ndarray:
 
 
 def retrieve_standard(query: str, chunks: list[dict],
-                      embeddings: np.ndarray) -> list[dict]:
+                       embeddings: np.ndarray) -> list[dict]:
     """
-    Standard retrieval: return the TOP_K most similar chunks globally.
-
-    Known limitation: longer documents have more chunks competing for the
-    top-K slots, so they statistically dominate results regardless of
-    actual relevance. This is called 'document length bias'.
+    Standard retrieval: global top-K by cosine similarity.
+    Known limitation: longer documents dominate due to having more candidate chunks.
     """
     query_vec = embed_query(query)
     scores = cosine_similarity(query_vec, embeddings)
     top_indices = np.argsort(scores)[::-1][:TOP_K]
-
     results = []
     for idx in top_indices:
         chunk = chunks[idx].copy()
@@ -237,17 +276,12 @@ def retrieve_standard(query: str, chunks: list[dict],
 
 
 def retrieve_diverse(query: str, chunks: list[dict],
-                     embeddings: np.ndarray,
-                     max_per_source: int = 2) -> list[dict]:
+                      embeddings: np.ndarray,
+                      max_per_source: int = 2) -> list[dict]:
     """
     Diversity-enforced retrieval: at most max_per_source chunks per document.
-
-    This prevents longer documents from monopolising all TOP_K slots.
-    Added after observing that the DNP document (73 chunks) dominated
-    retrieval in 5 of 12 questions when using standard retrieval.
-
-    Trade-off: for single-document questions, this can introduce irrelevant
-    chunks and actually harm performance (observed in Q5).
+    Added as Part A Fix 2 to address document length bias (Q9 failure).
+    Prevents longer documents from monopolising all TOP_K slots.
     """
     query_vec = embed_query(query)
     scores = cosine_similarity(query_vec, embeddings)
@@ -274,16 +308,11 @@ def retrieve_diverse(query: str, chunks: list[dict],
 # ─────────────────────────────────────────────────────────────────
 
 def generate_answer(query: str, retrieved_chunks: list[dict]) -> str:
-    """
-    Send the retrieved chunks + question to Gemini and get an answer.
-    Retries up to 3 times if a rate limit error occurs.
-    """
-    # Assemble context from retrieved chunks
+    """Generate an answer from retrieved chunks. Retries on rate limit."""
     context_parts = []
     for chunk in retrieved_chunks:
         context_parts.append(f"[Source: {chunk['source']}]\n{chunk['text']}")
     context = "\n\n---\n\n".join(context_parts)
-
     prompt = f"{SYSTEM_PROMPT}\n\nCONTEXT:\n{context}\n\nQUESTION: {query}\n\nANSWER:"
 
     for attempt in range(3):
@@ -303,23 +332,20 @@ def generate_answer(query: str, retrieved_chunks: list[dict]) -> str:
 
 
 # ─────────────────────────────────────────────────────────────────
-# Step 5: Full RAG Query (combines retrieval + generation)
+# Step 5: Full RAG Query
 # ─────────────────────────────────────────────────────────────────
 
 def rag_query(query: str, chunks: list[dict],
               embeddings: np.ndarray,
               diverse: bool = False) -> dict:
     """
-    Run a complete RAG query: retrieve relevant chunks, then generate an answer.
+    Run a complete RAG query.
 
     Args:
         query:      The question to answer
         chunks:     All document chunks
         embeddings: All chunk vectors
         diverse:    If True, use diversity-enforced retrieval (max 2 chunks/doc)
-                    If False, use standard retrieval (global top-K)
-
-    Returns a dict with: query, retrieval_mode, retrieved_chunks, answer
     """
     if diverse:
         retrieved = retrieve_diverse(query, chunks, embeddings)
@@ -329,14 +355,10 @@ def rag_query(query: str, chunks: list[dict],
     answer = generate_answer(query, retrieved)
 
     return {
-        "query": query,
-        "retrieval_mode": "diverse" if diverse else "standard",
+        "query":            query,
+        "retrieval_mode":   "diverse" if diverse else "standard",
         "retrieved_chunks": [
-            {
-                "source": c["source"],
-                "score":  round(c["score"], 4),
-                "text":   c["text"]
-            }
+            {"source": c["source"], "score": round(c["score"], 4), "text": c["text"]}
             for c in retrieved
         ],
         "answer": answer
