@@ -1,0 +1,39 @@
+IMPROVEMENT RESULTS — Before vs After
+Generated: 2026-03-30 16:20:11
+============================================================
+
+INDEX COMPARISON
+  Fixed-size chunks    : 163
+  Sentence-aware chunks: 99
+
+============================================================
+FIX 1: Q6 — Sentence-aware chunking
+============================================================
+
+Question: Can a Professor Emeritus serve in an administrative role at a university?
+
+BEFORE — Status: ANSWERED
+  Sources: ['Framework-PE.pdf', 'Framework-PE.pdf', 'Framework-PE.pdf', 'Framework-PE.pdf', 'Framework-PE.pdf']
+  Answer: Yes. According to Framework-PE.pdf, while Professor Emeritus (PE) are generally not expected to hold administrative positions, at young universities where senior faculty is not available, a PE may be asked to take up administrative positions.
+
+AFTER  — Status: ANSWERED
+  Sources: ['Framework-PE.pdf', 'Framework-PE.pdf', 'Framework-PE.pdf', 'Framework-PE.pdf', 'Framework-PE.pdf']
+  Answer: Yes, a Professor Emeritus may serve in an administrative role, particularly at young universities where senior faculty is not available to take up such positions. [Source: Framework-PE.pdf]
+
+============================================================
+FIX 2: Q9 — Diversity-enforced retrieval
+============================================================
+
+Question: What is the difference between the authority that confers the Meritorious Professor title versus the DNP title?
+
+BEFORE — Status: FAILED — model could not find information
+  Sources (1 doc): ['Framework-DNP.pdf', 'Framework-DNP.pdf', 'Framework-DNP.pdf', 'Framework-DNP.pdf', 'Framework-DNP.pdf']
+  Answer: I cannot find this information in the provided documents.
+
+AFTER  — Status: ANSWERED
+  Sources (3 docs): ['Framework-DNP.pdf', 'Framework-DNP.pdf', 'Framework-PE.pdf', 'Framework-MP.pdf', 'Framework-MP.pdf']
+  Answer: Based on the provided documents, the authority and process for conferring these titles are as follows:
+
+*   **Distinguished National Professor (DNP):** The title is awarded based on the recommendations of a high-level HEC selection committee ([Source: Framework-DNP.pdf]).
+*   **Meritorious Professor:** Universities may appoint a Meritorious Professor through their own statutory process, following guidelines prescribed by the Higher Education Commission (HEC) ([Source: Framework-MP.pdf]).
+

@@ -1,0 +1,95 @@
+{
+  "generated": "2026-03-30 16:20:11",
+  "index_comparison": {
+    "fixed_size_chunks": 163,
+    "sentence_aware_chunks": 99
+  },
+  "fix1_Q6": {
+    "question": "Can a Professor Emeritus serve in an administrative role at a university?",
+    "correct_answer": "PE shall carry no formal statutory administrative positions where senior faculty are available. However, at young universities where senior faculty is not available, PE may be asked to take up administrative positions.",
+    "before": {
+      "answer": "Yes. According to Framework-PE.pdf, while Professor Emeritus (PE) are generally not expected to hold administrative positions, at young universities where senior faculty is not available, a PE may be asked to take up administrative positions.",
+      "sources": [
+        "Framework-PE.pdf",
+        "Framework-PE.pdf",
+        "Framework-PE.pdf",
+        "Framework-PE.pdf",
+        "Framework-PE.pdf"
+      ],
+      "unique_sources": ["Framework-PE.pdf"],
+      "chunks_text": [
+        "ssor Emeritus at a newly developed \nuniversity, other than the parent university, will also not be paid the honorarium of PE \nif he/she is employed with any other university/institution/organization, ",
+        "and honor the \ndistinguished academic service and contributions of the Professor beyond superannuation. This title \nacknowledges their professional achievements, dedication, and impact on their field,",
+        "aculty is/are available for such \npositions.  However, at young universities, where senior faculty is not available to take up \nadministrative positions, PE may be asked to take up administrative posi",
+        "category of Vice Chancellors who \noffer their services as Professor Emeritus in newly developed universities, other than \ntheir parent university (reference Section 2). \n  \n5.3. The initial offer of a",
+        "e \nexperience as Professor is less than 10 years.  \nOR \n2.2. A Professor who has completed at least one tenure as a Vice-Chancellor in the public \nsector university shall be conferred the status of Pr"
+      ]
+    },
+    "after": {
+      "answer": "Yes, a Professor Emeritus may serve in an administrative role, particularly at young universities where senior faculty is not available to take up such positions. [Source: Framework-PE.pdf]",
+      "sources": [
+        "Framework-PE.pdf",
+        "Framework-PE.pdf",
+        "Framework-PE.pdf",
+        "Framework-PE.pdf",
+        "Framework-PE.pdf"
+      ],
+      "unique_sources": ["Framework-PE.pdf"],
+      "chunks_text": [
+        "However, at young universities, where senior faculty is not available to take up \nadministrative positions, PE may be asked to take up administrative positions. \n \n4.2. Professor Emeritus up to the ag",
+        "A Professor who has completed at least one tenure as a Vice-Chancellor in the public \nsector university shall be conferred the status of Professor Emeritus (PE) after attaining \nthe age of superannuat",
+        "Similarly, those Vice Chancellors who join as Professor Emeritus at a newly developed \nuniversity, other than the parent university, will also not be paid the honorarium of PE \nif he/she is employed w",
+        "The number of Professors Emeritus would vary from university to university depending \non its size and demand, but total number should not exceed 10% of the total working \nstrength of the regular worki",
+        "By bestowing this title, the institution \nbenefits from the Emeritus Professor's ongoing engagement in research, mentorship, and \nintellectual activities, thereby enhancing its reputation and fosterin"
+      ]
+    },
+    "before_status": "ANSWERED",
+    "after_status": "ANSWERED"
+  },
+  "fix2_Q9": {
+    "question": "What is the difference between the authority that confers the Meritorious Professor title versus the DNP title?",
+    "correct_answer": "MP is conferred at university level through Selection Board → Syndicate → Chancellor. DNP is conferred nationally by HEC through a national selection committee.",
+    "before": {
+      "answer": "I cannot find this information in the provided documents.",
+      "sources": [
+        "Framework-DNP.pdf",
+        "Framework-DNP.pdf",
+        "Framework-DNP.pdf",
+        "Framework-DNP.pdf",
+        "Framework-DNP.pdf"
+      ],
+      "unique_sources": ["Framework-DNP.pdf"],
+      "chunks_text": [
+        "vements of outstanding academicians and researchers, the \ntitle of Distinguished National Professor (DNP) shall be awarded to scholars who are leaders in their \nrespective fields and have made signifi",
+        "an exceptional honor, which shall be awarded solely based on merit as \nassessed against prescribed eligibility and evaluation criteria as well as upon the recommendations \nof a high-level HEC selectio",
+        "idered for the \naward of title. \nX. \nThe National Level Selection Committee will review the recommendations and approve \nselection of the DNPs under the below subjects/categories. A maximum of five DN",
+        "of the DNP, \nwhich may be shared with HEC on annual basis.   \nd. The DNP title may not be terminated from the holder except in case of proven charges of \ngross misconduct or plagiarism, which will req",
+        "its impact.  \nii. Services rendered at the community/university level and its impact. \nIV. \nEach participating university will set up a permanent/Standing selection committee, to be \nchaired by the Vi"
+      ]
+    },
+    "after": {
+      "answer": "Based on the provided documents, the authority and process for conferring these titles are as follows:\n\n*   **Distinguished National Professor (DNP):** The title is awarded based on the recommendations of a high-level HEC selection committee ([Source: Framework-DNP.pdf]).\n*   **Meritorious Professor:** Universities may appoint a Meritorious Professor through their own statutory process, following guidelines prescribed by the Higher Education Commission (HEC) ([Source: Framework-MP.pdf]).",
+      "sources": [
+        "Framework-DNP.pdf",
+        "Framework-DNP.pdf",
+        "Framework-PE.pdf",
+        "Framework-MP.pdf",
+        "Framework-MP.pdf"
+      ],
+      "unique_sources": [
+        "Framework-DNP.pdf",
+        "Framework-PE.pdf",
+        "Framework-MP.pdf"
+      ],
+      "chunks_text": [
+        "vements of outstanding academicians and researchers, the \ntitle of Distinguished National Professor (DNP) shall be awarded to scholars who are leaders in their \nrespective fields and have made signifi",
+        "an exceptional honor, which shall be awarded solely based on merit as \nassessed against prescribed eligibility and evaluation criteria as well as upon the recommendations \nof a high-level HEC selectio",
+        "and service to university education who has served university or a \nconstituent institute or a Centre of Excellence of the University for a minimum period \nof 10 years as Professor.  However, those wh",
+        "nstitution's standards of excellence. Additionally, it enhances the institution's prestige \nby associating it with distinguished scholars, thus attracting top-tier students, faculty, and research \nopp",
+        "Page 1 of 8 \n \n \nFRAMEWORK FOR APPOINTMENT OF MERITORIOUS PROFESSOR IN \nTHE HIGHER EDUCATION INSTITUTIONS (HEIs) \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \nHigher Education Commission \nIslamabad \n2024"
+      ]
+    },
+    "before_status": "FAILED — model could not find information",
+    "after_status": "ANSWERED"
+  }
+}
